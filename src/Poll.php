@@ -8,6 +8,7 @@ use Inani\Larapoll\Traits\PollCreator;
 class Poll extends Model
 {
     use PollCreator;
+
     protected $fillable = ['question'];
 
     /**
