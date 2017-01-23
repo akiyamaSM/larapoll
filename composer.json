@@ -1,0 +1,21 @@
+{
+    "name": "inani/Larapoll",
+    "description": "A Laravel package to create polls",
+    "keywords": ["polls", "votes", "laravel", "php"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Inani El Houssain",
+            "email": "inanielhoussain@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+      "psr-4": {
+        "Inani\\Larapoll\\": "src/"
+      }
+    },
+    "require": {
+      "illuminate/support": "~5"
+    }
+}
