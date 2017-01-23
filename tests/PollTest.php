@@ -17,8 +17,8 @@ class PollTest extends \TestCase
         ]);
 
         $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                    ->maxSelection()
-                    ->generate();
+                     ->maxSelection()
+                     ->generate();
 
         $this->assertTrue($bool);
     }
