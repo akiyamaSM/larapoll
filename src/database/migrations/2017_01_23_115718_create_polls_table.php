@@ -15,7 +15,7 @@ class CreatePollsTable extends Migration
         Schema::create('polls', function (Blueprint $table) {
             $table->increments('id');
             $table->string('question');
-            $table->integer('maxCheck')->default(0);
+            $table->integer('maxCheck')->default(1);
             $table->integer('isClosed')->default(0);
             $table->timestamps();
         });

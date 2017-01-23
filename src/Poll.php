@@ -4,10 +4,12 @@ namespace Inani\Larapoll;
 
 use Illuminate\Database\Eloquent\Model;
 use Inani\Larapoll\Traits\PollCreator;
+use Inani\Larapoll\Traits\PollAccessor;
+use Inani\Larapoll\Traits\PollManipulator;
 
 class Poll extends Model
 {
-    use PollCreator;
+    use PollCreator, PollAccessor, PollManipulator;
 
     protected $fillable = ['question'];
 
