@@ -11,7 +11,7 @@ trait PollCreator
 {
     protected $options_add = [];
 
-    protected $maxSelection = 0;
+    protected $maxSelection = 1;
     /**
      * Add an option to the array if not exist
      *
@@ -62,10 +62,10 @@ trait PollCreator
      * @param int $number
      * @return $this
      */
-    public function maxSelection($number = 0)
+    public function maxSelection($number = 1)
     {
-        if($number <= 0){
-            $number = 0;
+        if($number <= 1){
+            $number = 1;
         }
         $this->maxSelection = $number;
 
