@@ -16,4 +16,14 @@ class Option extends Model
     {
         return $this->belongsTo(Poll::class);
     }
+
+    /**
+     * Check if the option is voted
+     *
+     * @return bool
+     */
+    public function isVoted()
+    {
+        return false;
+    }
 }

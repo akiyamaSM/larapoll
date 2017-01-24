@@ -46,4 +46,24 @@ class PollTest extends \TestCase
 
         $this->assertEquals(6, $poll->optionsNumber());
     }
+
+    /** @test */
+    public function it_removes_unvoted_options_from_poll()
+    {
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection()
+            ->generate();
+
+        $this->assertTrue($bool);
+        $this->assertEquals(4, $poll->optionsNumber());
+
+        $option = $poll->options()->first();
+        $this->assertTrue($poll->detach($option));
+        $this->assertEquals(3, $poll->optionsNumber());
+
+    }
 }
