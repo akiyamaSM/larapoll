@@ -13,7 +13,7 @@ trait PollManipulator
 
     /**
      * attach new options
-     * 
+     *
      * @param $options
      * @return mixed
      */
