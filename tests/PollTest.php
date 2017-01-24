@@ -4,7 +4,11 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\DB;
+use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Poll;
+use InvalidArgumentException;
+use League\Flysystem\Exception;
 
 class PollTest extends \TestCase
 {
@@ -80,7 +84,7 @@ class PollTest extends \TestCase
                      ->maxSelection(2)
                      ->generate();
         $voteFor = $poll->options()->first();
-        $this->assertTrue($voter->poll($poll)->vote($voteFor));
+        $this->assertTrue($voter->poll($poll)->vote($voteFor->getKey()));
     }
 
     /** @test */
@@ -103,6 +107,31 @@ class PollTest extends \TestCase
         $this->assertNotNull($e);
     }
 
+    /** @test */
+    public function it_doesnt_remove_voted_options_from_poll()
+    {
+        $voter = $this->makeUser();
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+                     ->maxSelection(2)
+                     ->generate();
+
+        $this->assertTrue($bool);
+        $this->assertEquals(4, $poll->optionsNumber());
+
+        $option = $poll->options()->first();
+        $this->assertTrue($voter->poll($poll)->vote($option->getKey()));
+        try{
+            $poll->detach($option);
+        }catch (RemoveVotedOptionException $e){
+        }
+        $this->assertNotNull($e);
+
+        $this->assertEquals(4, $poll->optionsNumber());
+    }
     /**
      * Make one user
      *

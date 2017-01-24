@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Inani\Larapoll\Exceptions\CheckedOptionsException;
 use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 use Inani\Larapoll\Exceptions\OptionsNotProvidedException;
+use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Option;
 
 trait PollManipulator
@@ -55,6 +56,7 @@ trait PollManipulator
      * @throws CheckedOptionsException
      * @throws OptionsInvalidNumberProvidedException
      * @throws OptionsNotProvidedException
+     * @throws RemoveVotedOptionException
      */
     public function detach($options)
     {
@@ -66,13 +68,22 @@ trait PollManipulator
         foreach($options as $option){
 
             if(is_int($option)){
+
+                $option = Option::findOrFail($option);
+                if($option->isVoted())
+                    throw new RemoveVotedOptionException();
+
                 if($this->containsAndNotVoted($elements, $option)){
                     $oldOptions[] = $option;
                 }
+
             }else if($option instanceof Option){
+                if($option->isVoted())
+                    throw new RemoveVotedOptionException();
                 if($this->containsAndNotVoted($elements, $option->getKey())) {
                     $oldOptions = $option->getKey();
                 }
+
             }else {
                 throw new \InvalidArgumentException("Array arguments must be composed of ids or option object values");
             }
@@ -98,9 +109,15 @@ trait PollManipulator
         return Option::destroy($elements) == $count;
     }
 
+    /**
+     * Check if the option already exists in the poll
+     *
+     * @param Collection $elements
+     * @param $against
+     * @return bool
+     */
     private function containsAndNotVoted(Collection $elements, $against)
     {
-        //if options are voted throw new RemoveVotedOptionException
         return $elements->contains($against);
     }
 }
