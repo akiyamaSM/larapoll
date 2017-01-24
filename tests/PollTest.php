@@ -2,6 +2,7 @@
 
 namespace Inani\Larapoll\Tests;
 
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Inani\Larapoll\Poll;
 
@@ -65,5 +66,50 @@ class PollTest extends \TestCase
         $this->assertTrue($poll->detach($option));
         $this->assertEquals(3, $poll->optionsNumber());
 
+    }
+
+    /** @test */
+    public function user_votes_in_a_poll()
+    {
+        $voter = $this->makeUser();
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+                     ->maxSelection(2)
+                     ->generate();
+        $voteFor = $poll->options()->first();
+        $this->assertTrue($voter->poll($poll)->vote($voteFor));
+    }
+
+    /** @test */
+    public function user_selects_more_options_to_votes_in_a_poll()
+    {
+        $voter = $this->makeUser();
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+                     ->maxSelection(2)
+                     ->generate();
+        $voteFor = $poll->options()->get()->take(3)->pluck('id')->all();
+        try{
+            $voter->poll($poll)->vote($voteFor);
+        }catch (\InvalidArgumentException $e){
+
+        }
+        $this->assertNotNull($e);
+    }
+
+    /**
+     * Make one user
+     *
+     * @return mixed
+     */
+    public function makeUser()
+    {
+        return factory(User::class)->create();
     }
 }

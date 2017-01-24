@@ -2,6 +2,7 @@
 
 namespace Inani\Larapoll;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Option extends Model
@@ -25,5 +26,15 @@ class Option extends Model
     public function isVoted()
     {
         return false;
+    }
+
+    /**
+     * Get the voters who voted to that option
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function voters()
+    {
+        return $this->belongsToMany(User::class, 'votes')->withTimestamps();
     }
 }
