@@ -34,7 +34,7 @@ trait Voter
      */
     public function vote($options)
     {
-       $options = is_array($options)? $options : func_get_args();
+        $options = is_array($options)? $options : func_get_args();
         // if poll not selected
         if(is_null($this->poll))
             throw new PollNotSelectedToVoteException();
@@ -50,8 +50,12 @@ trait Voter
         if($this->poll->isCheckable() &&  $countVotes > $this->poll->maxCheck)
             throw new \InvalidArgumentException("selected more options {$countVotes} than the limited {$this->poll->maxCheck}");
 
-        $this->options()->attach($options);
-        return true;
+        array_walk($options, function (&$val){
+            if(! is_int($val))
+                throw new \InvalidArgumentException("Only id are accepted");
+        });
+
+        return !is_null($this->options()->sync($options, false)['attached']);
     }
 
     /**

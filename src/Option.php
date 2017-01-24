@@ -25,7 +25,7 @@ class Option extends Model
      */
     public function isVoted()
     {
-        return false;
+        return $this->voters()->count() != 0;
     }
 
     /**
