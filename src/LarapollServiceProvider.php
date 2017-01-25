@@ -28,6 +28,8 @@ class LarapollServiceProvider extends ServiceProvider
             => base_path('database/migrations/2017_01_23_115718_create_polls_table.php'),
             __DIR__. '/database/migrations/2017_01_23_124357_create_options_table.php'
             => base_path('database/migrations/2017_01_23_124357_create_options_table.php'),
+            __DIR__. '/database/migrations/2017_01_25_111721_create_votes_table.php'
+            => base_path('database/migrations/2017_01_25_111721_create_votes_table.php'),
         ]);
     }
 }
