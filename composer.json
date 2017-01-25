@@ -1,5 +1,5 @@
 {
-    "name": "inani/Larapoll",
+    "name": "inani/larapoll",
     "description": "A Laravel package to create polls",
     "keywords": ["polls", "votes", "laravel", "php"],
     "license": "MIT",
