@@ -120,4 +120,20 @@ trait PollManipulator
     {
         return $elements->contains($against);
     }
+
+    /**
+     * Close the poll
+     *
+     * @return mixed
+     */
+    public function lock()
+    {
+        foreach($this->options()->get() as $option){
+            $option->updateTotalVotes();
+        }
+
+        $this->isClosed = 1;
+        return $this->save();
+    }
+
 }

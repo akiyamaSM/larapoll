@@ -5,6 +5,7 @@ namespace Inani\Larapoll\Traits;
 
 
 use Inani\Larapoll\Exceptions\PollNotSelectedToVoteException;
+use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Option;
 use Inani\Larapoll\Poll;
 
@@ -30,6 +31,7 @@ trait Voter
      * @param $options
      * @return bool
      * @throws PollNotSelectedToVoteException
+     * @throws VoteInClosedPollException
      * @throws \Exception
      */
     public function vote($options)
@@ -38,6 +40,9 @@ trait Voter
         // if poll not selected
         if(is_null($this->poll))
             throw new PollNotSelectedToVoteException();
+
+        if($this->poll->isLocked())
+            throw new VoteInClosedPollException();
 
         if($this->hasVoted())
             throw new \Exception("User can not vote again!");

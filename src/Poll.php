@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Inani\Larapoll\Traits\PollCreator;
 use Inani\Larapoll\Traits\PollAccessor;
 use Inani\Larapoll\Traits\PollManipulator;
+use Inani\Larapoll\Traits\PollQueries;
 
 class Poll extends Model
 {
-    use PollCreator, PollAccessor, PollManipulator;
+    use PollCreator, PollAccessor, PollManipulator, PollQueries;
 
     protected $fillable = ['question'];
 
