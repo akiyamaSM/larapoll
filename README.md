@@ -18,10 +18,11 @@ Then include the service provider inside `config/app.php`.
     ...
 ];
 ```
-Publish config and migrations
+Publish migrations, and migrate
 
-```
+```php
 php artisan vendor:publish
+php artisan migrate
 ```
 
 ___
@@ -31,7 +32,6 @@ ___
 To setup a model all you have to do is add (and import) the `Voter` trait.
 
 ```php
-
 use Inani\Larapoll\Traits\Voter;
 class User extends Model
 {
