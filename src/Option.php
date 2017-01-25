@@ -37,4 +37,37 @@ class Option extends Model
     {
         return $this->belongsToMany(User::class, 'votes')->withTimestamps();
     }
+
+    /**
+     * Get number of votes to an option
+     *
+     * @return mixed
+     */
+    public function countVotes()
+    {
+        if($this->isPollClosed()){
+            return $this->votes;
+        }
+        return Vote::where('option_id', $this->getKey())->count();
+    }
+
+    /**
+     * Update the total of
+     * @return bool
+     */
+    public function updateTotalVotes()
+    {
+        $this->votes = $this->countVotes();
+        return $this->save();
+    }
+
+    /**
+     * Check if the option is Closed
+     *
+     * @return bool
+     */
+    public function isPollClosed()
+    {
+        return $this->poll->isLocked();
+    }
 }

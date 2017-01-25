@@ -4,11 +4,10 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Facades\DB;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
+use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Poll;
 use InvalidArgumentException;
-use League\Flysystem\Exception;
 
 class PollTest extends \TestCase
 {
@@ -132,6 +131,65 @@ class PollTest extends \TestCase
 
         $this->assertEquals(4, $poll->optionsNumber());
     }
+
+    /** @test */
+    public function it_gets_poll_ordered()
+    {
+        $voter = $this->makeUser();
+        $anOtherVoter = $this->makeUser();
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection(2)
+            ->generate();
+        $option = $poll->options()->first();
+        $this->assertTrue($voter->poll($poll)->vote($option->getKey()));
+        $this->assertTrue($anOtherVoter->poll($poll)->vote($option->getKey()));
+
+        $mostVoted = $poll->results()->inOrder()[0];
+        $this->assertEquals($option->getKey(), $mostVoted["option"]->getKey());
+        $this->assertEquals(2, $mostVoted["votes"]);
+    }
+
+    /** @test */
+    public function it_closes_poll()
+    {
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection(2)
+            ->generate();
+        $this->assertFalse($poll->isLocked());
+        $this->assertTrue($poll->lock());
+        $this->assertTrue($poll->isLocked());
+    }
+
+    /** @test */
+    public function it_doesnt_vote_in_closed_poll()
+    {
+        $voter = $this->makeUser();
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection(2)
+            ->generate();
+        $this->assertTrue($poll->lock());
+        $option = $poll->options()->first();
+
+        try{
+            $voter->poll($poll)->vote($option->getKey());
+        }catch(\Exception $e){
+            $this->assertTrue($e instanceof VoteInClosedPollException);
+        }
+        $this->assertNotNull($e);
+    }
+
     /**
      * Make one user
      *

@@ -34,4 +34,14 @@ trait PollAccessor
     {
         return !$this->isRadio();
     }
+
+    /**
+     * Check if the poll is closed
+     *
+     * @return bool
+     */
+    public function isLocked()
+    {
+        return $this->isClosed == 1;
+    }
 }
