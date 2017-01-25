@@ -1,4 +1,4 @@
-# larapoll
+# Larapoll
 A Laravel package to manage your polls
 
 
@@ -20,7 +20,7 @@ Then include the service provider inside `config/app.php`.
 ```
 Publish migrations, and migrate
 
-```php
+```
 php artisan vendor:publish
 php artisan migrate
 ```
