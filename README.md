@@ -5,7 +5,7 @@ A Laravel package to manage your polls
 ## Installation:
 First, install the package through Composer.
 
-```php
+```bash
 composer require inani/larapoll
 ```
 
@@ -20,7 +20,7 @@ Then include the service provider inside `config/app.php`.
 ```
 Publish migrations, and migrate
 
-```
+```bash
 php artisan vendor:publish
 php artisan migrate
 ```
