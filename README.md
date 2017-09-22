@@ -77,6 +77,11 @@ $poll->optionsNumber(); // 5
 ```php
 $bool = $poll->lock();
 ```
+### Unlock a closed poll
+```php
+$bool = $poll->unLock();
+```
+
 ## Voting
 
 ### Making votes
