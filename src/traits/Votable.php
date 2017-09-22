@@ -43,6 +43,7 @@ trait Votable
 
     /**
      * Update the total of
+     *
      * @return bool
      */
     public function updateTotalVotes()
