@@ -190,6 +190,31 @@ class PollTest extends \TestCase
         $this->assertNotNull($e);
     }
 
+    /** @test */
+    public function it_does_reopen_a_closed_poll()
+    {
+        $voter = $this->makeUser();
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection(2)
+            ->generate();
+        $this->assertTrue($poll->lock());
+        $option = $poll->options()->first();
+
+        try{
+            $voter->poll($poll)->vote($option->getKey());
+        }catch(\Exception $e){
+            $this->assertTrue($e instanceof VoteInClosedPollException);
+        }
+        $this->assertNotNull($e);
+
+        $poll->unLock();
+        $this->assertTrue($voter->poll($poll)->vote($option->getKey()));
+    }
+
     /**
      * Make one user
      *

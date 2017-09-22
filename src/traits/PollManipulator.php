@@ -136,4 +136,15 @@ trait PollManipulator
         return $this->save();
     }
 
+    /**
+     *  Unlock the closed poll
+     *
+     * @return mixed
+     */
+    public function unLock()
+    {
+        $this->isClosed = 0;
+        return $this->save();
+    }
+
 }
