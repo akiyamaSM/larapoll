@@ -92,3 +92,13 @@ $poll->results()->grab();
 // get results in order (desc)
 $poll->results()->inOrder();
 ```
+
+## CRUD HANDLER
+### Set up the admin middelware's name
+A larapoll_config.php file will be added where you can put the name of the middelware used to protect the access
+Add this line in the .env file mentioning the name of the middelware
+
+```php
+ADMIN_AUTH_MIDDELWARE = admin
+```
+
