@@ -15,7 +15,7 @@ class Poll extends Model
     protected $fillable = ['question'];
 
     /**
-     * A poll has many options
+     * A poll has many options related to
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

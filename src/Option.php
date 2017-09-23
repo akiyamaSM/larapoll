@@ -10,6 +10,7 @@ class Option extends Model
     use Votable;
 
     protected $fillable = ['name'];
+
     /**
      * An option belongs to one poll
      *
