@@ -1,7 +1,6 @@
 <?php
 namespace Inani\Larapoll\Traits;
 
-
 use Illuminate\Support\Collection;
 use Inani\Larapoll\Exceptions\CheckedOptionsException;
 use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
@@ -60,6 +59,7 @@ trait PollManipulator
      */
     public function detach($options)
     {
+        // Prepare the elements as an array
         $options = is_array($options) ? $options : func_get_args();
 
         $oldOptions = [];
@@ -128,6 +128,7 @@ trait PollManipulator
      */
     public function lock()
     {
+        // Update the total of votes column
         foreach($this->options()->get() as $option){
             $option->updateTotalVotes();
         }

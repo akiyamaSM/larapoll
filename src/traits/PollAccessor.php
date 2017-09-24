@@ -16,7 +16,7 @@ trait PollAccessor
     }
 
     /**
-     * Check if it accepts one option
+     * Check if it the Voter can select one option or many
      *
      * @return bool
      */
@@ -53,5 +53,15 @@ trait PollAccessor
     public function getQuestion()
     {
         return $this->question;
+    }
+  
+     * Check if the poll is open
+     *
+     * @return bool
+     */
+    public function isOpen()
+    {
+        return !$this->isLocked();
+
     }
 }
