@@ -39,4 +39,15 @@ class PollManagerController extends Controller
     {
         $poll = PollCreator::createFromRequest($request->all());
     }
+
+    /**
+     * Show the poll to be prepared to edit
+     *
+     * @param Poll $poll
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit(Poll $poll)
+    {
+        return view('larapoll::dashboard.edit', compact('poll'));
+    }
 }

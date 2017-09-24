@@ -62,6 +62,22 @@ class PollDashboardTest extends \TestCase
             ->seeInDatabase('polls', [ 'question' => $request['question'] ]);
     }
 
+    /** @test */
+    public function an_admin_can_see_a_poll()
+    {
+        $this->beAdmin();
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr'])
+            ->maxSelection()
+            ->generate();
+        $this->get(route('poll.edit', [ 'poll' => $poll->id ]))
+            ->assertResponseStatus(200)
+            ->see($poll->question);
+    }
+
     /**
      * Make a user and Connect as admin
      *

@@ -54,7 +54,8 @@ trait PollAccessor
     {
         return $this->question;
     }
-  
+
+    /*
      * Check if the poll is open
      *
      * @return bool
@@ -62,6 +63,5 @@ trait PollAccessor
     public function isOpen()
     {
         return !$this->isLocked();
-
     }
 }
