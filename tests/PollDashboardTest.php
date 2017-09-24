@@ -75,7 +75,10 @@ class PollDashboardTest extends \TestCase
             ->generate();
         $this->get(route('poll.edit', [ 'poll' => $poll->id ]))
             ->assertResponseStatus(200)
-            ->see($poll->question);
+            ->see($poll->question)
+            ->see('Cristiano Ronaldo')
+            ->see('Neymar Jr')
+            ->see('Lionel Messi');
     }
 
     /**
