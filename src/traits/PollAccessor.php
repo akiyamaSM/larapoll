@@ -44,4 +44,14 @@ trait PollAccessor
     {
         return $this->isClosed == 1;
     }
+
+    /**
+     * Get the question
+     *
+     * @return mixed
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
 }
