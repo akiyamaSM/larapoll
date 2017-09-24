@@ -46,6 +46,15 @@ trait PollAccessor
     }
 
     /**
+     * Get the question
+     *
+     * @return mixed
+     */
+    public function getQuestion()
+    {
+        return $this->question;
+    }
+  
      * Check if the poll is open
      *
      * @return bool
@@ -53,5 +62,6 @@ trait PollAccessor
     public function isOpen()
     {
         return !$this->isLocked();
+
     }
 }
