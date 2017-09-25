@@ -29,4 +29,8 @@ class OptionManagerController extends Controller
         $poll->attach($request->get('options'));
     }
 
+    public function remove(Poll $poll, Request $request)
+    {
+        $poll->detach($request->get('options'));
+    }
 }

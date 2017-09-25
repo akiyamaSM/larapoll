@@ -101,6 +101,32 @@ class PollDashboardTest extends \TestCase
                  'poll_id' => $poll->id
             ]);
     }
+
+    /** @test */
+    public function an_admin_can_remove_unvoted_options()
+    {
+        // Having an admin and poll with options
+        $this->beAdmin();
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
+            ->maxSelection()
+            ->generate();
+        // Send a request with the selected options
+
+        $toDelete = $poll->options()->orderBy('id', 'desc')->first();
+        $options = [
+            'options' => [ $toDelete->id ]
+        ];
+        $this->delete( route('poll.options.remove', $poll->id), $options)
+             ->dontSeeInDatabase('options', [
+                'name' => $toDelete->name,
+                'id' => $toDelete->id
+             ]);
+    }
+
     /**
      * Make a user and Connect as admin
      *
