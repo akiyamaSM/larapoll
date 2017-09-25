@@ -31,6 +31,9 @@ class OptionManagerController extends Controller
 
     public function remove(Poll $poll, Request $request)
     {
-        $poll->detach($request->get('options'));
+        try{
+            $poll->detach($request->get('options'));
+        }catch (\Exception $e){
+        }
     }
 }
