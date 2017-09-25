@@ -4,7 +4,7 @@ namespace Inani\Larapoll\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Inani\Larapoll\Helpers\PollCreator;
+use Inani\Larapoll\Helpers\PollHandler;
 use Inani\Larapoll\Poll;
 
 class PollManagerController extends Controller
@@ -37,7 +37,7 @@ class PollManagerController extends Controller
      */
     public function store(Request $request)
     {
-        $poll = PollCreator::createFromRequest($request->all());
+        $poll = PollHandler::createFromRequest($request->all());
     }
 
     /**
@@ -49,5 +49,16 @@ class PollManagerController extends Controller
     public function edit(Poll $poll)
     {
         return view('larapoll::dashboard.edit', compact('poll'));
+    }
+
+    /**
+     * Update the Poll
+     *
+     * @param Poll $poll
+     * @param Request $request
+     */
+    public function update(Poll $poll, Request $request)
+    {
+        PollHandler::modify($poll, $request->all());
     }
 }

@@ -29,8 +29,17 @@ class OptionManagerController extends Controller
         $poll->attach($request->get('options'));
     }
 
+    /**
+     * Remove the Selected Option
+     *
+     * @param Poll $poll
+     * @param Request $request
+     */
     public function remove(Poll $poll, Request $request)
     {
-        $poll->detach($request->get('options'));
+        try{
+            $poll->detach($request->get('options'));
+        }catch (\Exception $e){
+        }
     }
 }

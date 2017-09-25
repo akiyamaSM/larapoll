@@ -4,7 +4,7 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Inani\Larapoll\Option;
+use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Poll;
 
 class PollDashboardTest extends \TestCase
@@ -85,15 +85,14 @@ class PollDashboardTest extends \TestCase
     /** @test */
     public function an_admin_can_add_new_options()
     {
-        // Having an admin & a poll
         $this->beAdmin();
-        // Having a poll
+
         $poll = factory(Poll::class)->create();
-        // Having an options
+
         $options = [
             'options' => [ 'option'. str_random(3) ]
         ];
-        // Send a Post request to endpoint
+
         $this->post(route('poll.options.add', [ 'id' => $poll->id ]), $options)
             ->assertResponseStatus(200)
             ->seeInDatabase('options', [
@@ -105,7 +104,6 @@ class PollDashboardTest extends \TestCase
     /** @test */
     public function an_admin_can_remove_unvoted_options()
     {
-        // Having an admin and poll with options
         $this->beAdmin();
         $poll = new Poll([
             'question' => 'Who is the Best Player of the World?'
@@ -114,7 +112,6 @@ class PollDashboardTest extends \TestCase
         $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
             ->maxSelection()
             ->generate();
-        // Send a request with the selected options
 
         $toDelete = $poll->options()->orderBy('id', 'desc')->first();
         $options = [
@@ -127,6 +124,62 @@ class PollDashboardTest extends \TestCase
              ]);
     }
 
+    /** @test */
+    public function an_admin_cant_remove_voted_option()
+    {
+
+        $this->beAdmin();
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
+            ->maxSelection()
+            ->generate();
+
+        $voteFor = $poll->options()->first();
+        $options = [
+            'options' => [ $voteFor->id ]
+        ];
+        $this->user->poll($poll)->vote($voteFor->getKey());
+
+        $this->delete( route('poll.options.remove', $poll->id), $options)
+            ->SeeInDatabase('options', [
+                'name' => $voteFor->name,
+                'id' => $voteFor->id
+            ]);
+    }
+
+    /** @test */
+    public function an_admin_can_modify_poll_type()
+    {
+        $this->beAdmin();
+
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
+            ->maxSelection()
+            ->generate();
+
+        $options = [
+            'count_check' => 2,
+        ];
+        $this->post(route('poll.update', $poll->id), $options)
+            ->assertResponseStatus(200)
+            ->assertEquals(2, Poll::findOrFail($poll->id)->maxCheck);
+    }
+
+    public function an_admin_can_close_a_poll()
+    {
+
+    }
+
+    public function an_admin_can_reopen_a_closed_poll()
+    {
+
+    }
     /**
      * Make a user and Connect as admin
      *
