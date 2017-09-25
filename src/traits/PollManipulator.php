@@ -145,4 +145,15 @@ trait PollManipulator
         return $this->save();
     }
 
+    /**
+     * Set the number of checkable options
+     *
+     * @param $count
+     * @return $this
+     */
+    public function canSelect($count)
+    {
+        $this->maxCheck = $count;
+        return $this->save();
+    }
 }

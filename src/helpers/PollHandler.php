@@ -4,7 +4,7 @@ namespace Inani\Larapoll\Helpers;
 
 use Inani\Larapoll\Poll;
 
-class PollCreator {
+class PollHandler {
 
     /**
      * Create a Poll from Request
@@ -22,5 +22,20 @@ class PollCreator {
             ->generate();
 
         return $poll;
+    }
+
+    public static function modify(Poll $poll, $data)
+    {
+        if(array_key_exists('count_check', $data)){
+            $poll->canSelect($data['count_check']);
+        }
+
+        if(array_key_exists('close', $data)){
+            if($data['close']){
+                $poll->lock();
+            }else{
+                $poll->unLock();
+            }
+        }
     }
 }

@@ -149,6 +149,37 @@ class PollDashboardTest extends \TestCase
                 'id' => $voteFor->id
             ]);
     }
+
+    /** @test */
+    public function an_admin_can_modify_poll_type()
+    {
+        $this->beAdmin();
+
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
+            ->maxSelection()
+            ->generate();
+
+        $options = [
+            'count_check' => 2,
+        ];
+        $this->post(route('poll.update', $poll->id), $options)
+            ->assertResponseStatus(200)
+            ->assertEquals(2, Poll::findOrFail($poll->id)->maxCheck);
+    }
+
+    public function an_admin_can_close_a_poll()
+    {
+
+    }
+
+    public function an_admin_can_reopen_a_closed_poll()
+    {
+
+    }
     /**
      * Make a user and Connect as admin
      *
