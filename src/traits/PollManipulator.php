@@ -63,7 +63,6 @@ trait PollManipulator
         $options = is_array($options) ? $options : func_get_args();
 
         $oldOptions = [];
-
         $elements = $this->options()->pluck('id');
         foreach($options as $option){
 
@@ -72,11 +71,9 @@ trait PollManipulator
                 $option = Option::findOrFail($option);
                 if($option->isVoted())
                     throw new RemoveVotedOptionException();
-
-                if($this->containsAndNotVoted($elements, $option)){
-                    $oldOptions[] = $option;
+                if($this->containsAndNotVoted($elements, $option->id)){
+                    $oldOptions[] = $option->id;
                 }
-
             }else if($option instanceof Option){
                 if($option->isVoted())
                     throw new RemoveVotedOptionException();
