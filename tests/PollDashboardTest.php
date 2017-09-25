@@ -73,6 +73,7 @@ class PollDashboardTest extends \TestCase
         $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr'])
             ->maxSelection()
             ->generate();
+
         $this->get(route('poll.edit', [ 'poll' => $poll->id ]))
             ->assertResponseStatus(200)
             ->see($poll->question)
@@ -81,6 +82,25 @@ class PollDashboardTest extends \TestCase
             ->see('Lionel Messi');
     }
 
+    /** @test */
+    public function an_admin_can_add_new_options()
+    {
+        // Having an admin & a poll
+        $this->beAdmin();
+        // Having a poll
+        $poll = factory(Poll::class)->create();
+        // Having an options
+        $options = [
+            'options' => [ 'option'. str_random(3) ]
+        ];
+        // Send a Post request to endpoint
+        $this->post(route('poll.options.add', [ 'id' => $poll->id ]), $options)
+            ->assertResponseStatus(200)
+            ->seeInDatabase('options', [
+                 'name' => $options['options'][0],
+                 'poll_id' => $poll->id
+            ]);
+    }
     /**
      * Make a user and Connect as admin
      *
