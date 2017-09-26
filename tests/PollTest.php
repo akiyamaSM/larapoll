@@ -214,7 +214,29 @@ class PollTest extends \TestCase
         $poll->unLock();
         $this->assertTrue($voter->poll($poll)->vote($option->getKey()));
     }
+    /** @test */
+    public function it_removes_poll_with_its_options_and_votes()
+    {
+        $voter = $this->makeUser();
 
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection()
+            ->generate();
+
+        $voteFor = $poll->options()->first();
+
+        $voter->poll($poll)->vote($voteFor->getKey());
+
+        $id = $poll->id;
+        $this->assertTrue($poll->remove());
+        $this->dontSeeInDatabase('options', [
+                'poll_id' => $id
+            ]);;
+    }
     /**
      * Make one user
      *

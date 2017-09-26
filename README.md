@@ -81,7 +81,11 @@ $bool = $poll->lock();
 ```php
 $bool = $poll->unLock();
 ```
-
+### Remove a poll
+All related options and votes will be deleted once the Poll is removed
+```php
+$bool = $poll->remove();
+```
 ## Voting
 
 ### Making votes
