@@ -171,14 +171,49 @@ class PollDashboardTest extends \TestCase
             ->assertEquals(2, Poll::findOrFail($poll->id)->maxCheck);
     }
 
+    /** @test */
     public function an_admin_can_close_a_poll()
     {
+        $this->beAdmin();
 
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
+            ->maxSelection()
+            ->generate();
+
+        $options = [
+            'close' => 1,
+        ];
+
+        $this->post(route('poll.update', $poll->id), $options)
+            ->assertResponseStatus(200)
+            ->assertTrue(Poll::findOrFail($poll->id)->isLocked());
     }
 
+    /** @test */
     public function an_admin_can_reopen_a_closed_poll()
     {
+        $this->beAdmin();
 
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
+            ->maxSelection()
+            ->generate();
+
+        $this->assertTrue($poll->lock());
+        $options = [
+            'close' => 0,
+        ];
+
+        $this->post(route('poll.update', $poll->id), $options)
+            ->assertResponseStatus(200)
+            ->assertFalse(Poll::findOrFail($poll->id)->isLocked());
     }
     /**
      * Make a user and Connect as admin
