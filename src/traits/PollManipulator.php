@@ -156,4 +156,14 @@ trait PollManipulator
         $this->maxCheck = $count;
         return $this->save();
     }
+
+    /**
+     * Remove a Poll
+     *
+     * @return mixed
+     */
+    public function remove()
+    {
+        return $this->delete();
+    }
 }

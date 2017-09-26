@@ -23,4 +23,19 @@ class Poll extends Model
     {
         return $this->hasMany(Option::class);
     }
+
+    /**
+     * Boot Method
+     *
+     */
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function($poll) {
+            foreach($poll->options()->get() as $option){
+                Vote::where('option_id', $option->id)->delete();
+            }
+            $poll->options()->delete();
+        });
+    }
 }
