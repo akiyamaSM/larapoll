@@ -17,9 +17,13 @@ class PollHandler {
         $poll = new Poll([
             'question' => $request['question']
         ]);
-        $poll->addOptions($request['options'])
-            ->maxSelection($request['maxCheck'])
-            ->generate();
+        $poll->addOptions($request['options']);
+
+        if(array_key_exists('maxCheck', $request)){
+            $poll->maxSelection($request['maxCheck']);
+        }
+        
+        $poll->generate();
 
         return $poll;
     }

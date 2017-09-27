@@ -215,6 +215,7 @@ class PollDashboardTest extends \TestCase
             ->assertResponseStatus(200)
             ->assertFalse(Poll::findOrFail($poll->id)->isLocked());
     }
+
     /**
      * Make a user and Connect as admin
      *
@@ -226,6 +227,7 @@ class PollDashboardTest extends \TestCase
         );
         return $this;
     }
+
     /**
      * Make one user
      *

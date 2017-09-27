@@ -61,4 +61,9 @@ class PollManagerController extends Controller
     {
         PollHandler::modify($poll, $request->all());
     }
+
+    public function create()
+    {
+        return view('larapoll::dashboard.create');
+    }
 }
