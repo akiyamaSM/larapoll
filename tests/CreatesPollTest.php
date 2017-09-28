@@ -35,9 +35,17 @@ class CreatesPollTest extends \TestCase
             ->submitForm('create', $input);
     }
 
+    /** @test */
     public function an_error_is_shown_if_not_filled()
     {
-
+        $input = [
+            'question' => ''
+        ];
+        $this->beAdmin()
+            ->visit(route('poll.create'))
+            ->submitForm('create', $input)
+            ->see('Question should be asked')
+            ->see('Two options must be used at least');
     }
     /**
      * Make a user and Connect as admin
