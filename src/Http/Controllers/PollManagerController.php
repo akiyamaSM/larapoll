@@ -5,6 +5,7 @@ namespace Inani\Larapoll\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inani\Larapoll\Helpers\PollHandler;
+use Inani\Larapoll\Http\Request\PollCreationRequest;
 use Inani\Larapoll\Poll;
 
 class PollManagerController extends Controller
@@ -16,7 +17,7 @@ class PollManagerController extends Controller
      */
     public function __construct()
     {
-        $this->middleware( config('larapoll_config.admin_auth') );
+        $this->middleware( config('larapoll_config.admin_auth'));
     }
 
     /**
@@ -33,9 +34,9 @@ class PollManagerController extends Controller
     /**
      * Store the Request
      *
-     * @param Request $request
+     * @param PollCreationRequest $request
      */
-    public function store(Request $request)
+    public function store(PollCreationRequest $request)
     {
         $poll = PollHandler::createFromRequest($request->all());
     }

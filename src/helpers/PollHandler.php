@@ -22,7 +22,7 @@ class PollHandler {
         if(array_key_exists('maxCheck', $request)){
             $poll->maxSelection($request['maxCheck']);
         }
-        
+
         $poll->generate();
 
         return $poll;
