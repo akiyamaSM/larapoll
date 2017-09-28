@@ -17,7 +17,7 @@ class PollManagerController extends Controller
      */
     public function __construct()
     {
-        $this->middleware( config('larapoll_config.admin_auth'), ['except' => ['store', 'create']] );
+        $this->middleware( config('larapoll_config.admin_auth'));
     }
 
     /**
