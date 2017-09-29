@@ -27,7 +27,9 @@ class PollManagerController extends Controller
      */
     public function index()
     {
-        $polls = Poll::withCount('options')->get();
+        $polls = Poll::withCount('options', 'votes')->latest()->paginate(
+            config('larapoll_config.pagination')
+        );
         return view('larapoll::dashboard.index', compact('polls'));
     }
 
@@ -66,6 +68,19 @@ class PollManagerController extends Controller
         PollHandler::modify($poll, $request->all());
     }
 
+    /**
+     * Delete a Poll
+     *
+     * @param Poll $poll
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function remove(Poll $poll)
+    {
+        $poll->remove();
+
+        return redirect(route('poll.index'))
+            ->with('success', 'Your poll has been deleted successfully');
+    }
     public function create()
     {
         return view('larapoll::dashboard.create');
