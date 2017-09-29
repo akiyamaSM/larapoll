@@ -41,7 +41,8 @@ class PollDashboardTest extends \TestCase
 
         $this->beAdmin()
             ->visit(route('poll.index'))
-            ->see($poll->question);
+            ->see($poll->question)
+            ->see($poll->options_count);
     }
 
     /** @test */
@@ -57,8 +58,10 @@ class PollDashboardTest extends \TestCase
             'maxCheck' => 1
         ];
         $this->post(route('poll.store'), $request)
-            ->assertResponseStatus(200)
-            ->seeInDatabase('polls', [ 'question' => $request['question'] ]);
+            ->assertRedirectedTo(route('poll.index'))
+            ->assertSessionHas('success');
+
+        $this->seeInDatabase('polls', [ 'question' => $request['question'] ]);
     }
 
     /** @test */

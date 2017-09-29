@@ -27,7 +27,7 @@ class PollManagerController extends Controller
      */
     public function index()
     {
-        $polls = Poll::with('options')->get();
+        $polls = Poll::withCount('options')->get();
         return view('larapoll::dashboard.index', compact('polls'));
     }
 
@@ -35,10 +35,13 @@ class PollManagerController extends Controller
      * Store the Request
      *
      * @param PollCreationRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(PollCreationRequest $request)
     {
         $poll = PollHandler::createFromRequest($request->all());
+        return redirect(route('poll.index'))
+            ->with('success', 'Your poll has been addedd successfully');
     }
 
     /**
