@@ -27,7 +27,7 @@ class PollManagerController extends Controller
      */
     public function index()
     {
-        $polls = Poll::all();
+        $polls = Poll::with('options')->get();
         return view('larapoll::dashboard.index', compact('polls'));
     }
 

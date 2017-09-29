@@ -32,9 +32,10 @@ class Poll extends Model
     {
         parent::boot();
         static::deleting(function($poll) {
-            foreach($poll->options()->get() as $option){
+
+            $poll->options->each(function($option){
                 Vote::where('option_id', $option->id)->delete();
-            }
+            });
             $poll->options()->delete();
         });
     }
