@@ -5,7 +5,7 @@ namespace Inani\Larapoll\Tests;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class EditsPollTest extends \TestCase
+class ManipulatesPollTest extends \TestCase
 {
     use DatabaseTransactions;
 
@@ -38,6 +38,15 @@ class EditsPollTest extends \TestCase
     public function an_admin_can_open_a_closed_poll()
     {
 
+    }
+
+    public function an_admin_can_delete_a_poll()
+    {
+        $this->beAdmin();
+
+        $this->visit(route('poll.index'))
+            ->press('')
+            ->assertSessionHas('success');
     }
 
     /**

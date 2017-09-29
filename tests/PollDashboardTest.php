@@ -25,7 +25,7 @@ class PollDashboardTest extends \TestCase
         $this->beAdmin()
             ->visit(route('poll.index'))
             ->assertResponseStatus(200)
-            ->see('Dashboard');
+            ->see('Polls');
     }
 
     /** @test */
@@ -42,7 +42,8 @@ class PollDashboardTest extends \TestCase
         $this->beAdmin()
             ->visit(route('poll.index'))
             ->see($poll->question)
-            ->see($poll->options_count);
+            ->see($poll->options_count)
+            ->see($poll->votes_count);
     }
 
     /** @test */
@@ -218,6 +219,26 @@ class PollDashboardTest extends \TestCase
             ->assertFalse(Poll::findOrFail($poll->id)->isLocked());
     }
 
+    /** @test */
+    public function an_admin_can_remove_a_poll()
+    {
+        $this->beAdmin();
+
+        $poll = new Poll([
+            'question' => 'Who is the Best Player of the World?'
+        ]);
+
+        $poll->addOptions(['Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr', 'Other'])
+            ->maxSelection()
+            ->generate();
+
+        $this->delete(route('poll.remove', $poll->id))
+            ->assertRedirectedTo(route('poll.index'))
+            ->assertSessionHas('success');
+
+        $this->dontSeeInDatabase('polls', [ 'id' => $poll->id ]);
+
+    }
     /**
      * Make a user and Connect as admin
      *
