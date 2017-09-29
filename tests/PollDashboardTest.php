@@ -3,9 +3,8 @@
 namespace Inani\Larapoll\Tests;
 
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Poll;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class PollDashboardTest extends \TestCase
 {
