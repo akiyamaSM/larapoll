@@ -9,9 +9,10 @@ class EditsPollTest extends \TestCase
 {
     use DatabaseTransactions;
 
+    /** @test */
     public function admin_can_see_poll_list()
     {
-
+        $this->assertTrue(true);
     }
 
     public function admin_can_add_new_options()
