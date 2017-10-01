@@ -89,4 +89,30 @@ class PollManagerController extends Controller
     {
         return view('larapoll::dashboard.create');
     }
+
+    /**
+     * Lock a Poll
+     *
+     * @param Poll $poll
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function lock(Poll $poll)
+    {
+        $poll->lock();
+        return redirect(route('poll.index'))
+            ->with('success', 'Your poll has been locked successfully');
+    }
+
+    /**
+     * Unlock a Poll
+     *
+     * @param Poll $poll
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function unlock(Poll $poll)
+    {
+        $poll->unLock();
+        return redirect(route('poll.index'))
+            ->with('success', 'Your poll has been unlocked successfully');
+    }
 }

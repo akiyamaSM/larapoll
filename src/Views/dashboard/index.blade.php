@@ -25,6 +25,7 @@
                     <th>State</th>
                     <th>Edit</th>
                     <th>Remove</th>
+                    <th>Lock/Unlock</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -42,7 +43,7 @@
                             @endif
                         </td>
                         <td>
-                            <a class="btn btn-default" href="{{ route('poll.edit', $poll->id) }}">
+                            <a class="btn btn-info" href="{{ route('poll.edit', $poll->id) }}">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -50,8 +51,19 @@
                             <form action="{{ route('poll.remove', $poll->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-warning">
+                                <button type="submit" class="btn btn-danger">
                                     <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            @php $route = $poll->isLocked()? 'poll.unlock': 'poll.lock' @endphp
+                            @php $fa = $poll->isLocked()? 'fa fa-unlock': 'fa fa-lock' @endphp
+                            <form action="{{ route($route, $poll->id) }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('PATCH') }}
+                                <button type="submit" class="btn">
+                                    <i class="{{ $fa }}" aria-hidden="true"></i>
                                 </button>
                             </form>
                         </td>

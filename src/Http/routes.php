@@ -7,6 +7,8 @@ Route::group(['namespace' => 'Inani\Larapoll\Http\Controllers', 'prefix' => 'lar
     Route::get('/admin/polls/{poll}', ['uses' => 'PollManagerController@edit', 'as' => 'poll.edit']);
     Route::post('/admin/polls/{poll}', ['uses' => 'PollManagerController@update', 'as' => 'poll.update']);
     Route::delete('/admin/polls/{poll}', ['uses' => 'PollManagerController@remove', 'as' => 'poll.remove']);
+    Route::patch('/admin/polls/{poll}/lock', ['uses' => 'PollManagerController@lock', 'as' => 'poll.lock']);
+    Route::patch('/admin/polls/{poll}/unlock', ['uses' => 'PollManagerController@unlock', 'as' => 'poll.unlock']);
     Route::post('/admin/polls', ['uses' => 'PollManagerController@store', 'as' => 'poll.store']);
     Route::get('/admin/polls/{poll}/options/add', ['uses' => 'OptionManagerController@push', 'as' => 'poll.options.push']);
     Route::post('/admin/polls/{poll}/options/add', ['uses' => 'OptionManagerController@add', 'as' => 'poll.options.add']);
