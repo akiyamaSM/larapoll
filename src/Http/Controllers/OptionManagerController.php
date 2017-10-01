@@ -4,6 +4,7 @@ namespace Inani\Larapoll\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inani\Larapoll\Http\Request\AddOptionsRequest;
 use Inani\Larapoll\Poll;
 
 class OptionManagerController extends Controller
@@ -22,11 +23,15 @@ class OptionManagerController extends Controller
      * Add new options to the poll
      *
      * @param Poll $poll
-     * @param Request $request
+     * @param AddOptionsRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function add(Poll $poll, Request $request)
+    public function add(Poll $poll, AddOptionsRequest $request)
     {
         $poll->attach($request->get('options'));
+
+        return redirect(route('poll.index'))
+            ->with('success', 'New poll options have been added successfully');
     }
 
     /**
@@ -41,5 +46,10 @@ class OptionManagerController extends Controller
             $poll->detach($request->get('options'));
         }catch (\Exception $e){
         }
+    }
+
+    public function push(Poll $poll)
+    {
+        return view('larapoll::dashboard.options.push', compact('poll'));
     }
 }
