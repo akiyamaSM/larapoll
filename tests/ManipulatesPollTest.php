@@ -4,6 +4,7 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Inani\Larapoll\Poll;
 
 class ManipulatesPollTest extends \TestCase
 {
@@ -15,9 +16,23 @@ class ManipulatesPollTest extends \TestCase
         $this->assertTrue(true);
     }
 
+    /** @test */
     public function admin_can_add_new_options()
     {
+        $this->beAdmin();
 
+        $poll = factory(Poll::class)->create();
+
+        $input = [
+            'options[0]' => 'some option'
+        ];
+
+        $this->visit(route('poll.options.push', $poll->id))
+            ->see($poll->question)
+            ->submitForm('Add', $input);
+
+        $this->assertResponseStatus(200)
+            ->see('New poll options have been added successfully');
     }
 
     public function admin_can_remove_options()

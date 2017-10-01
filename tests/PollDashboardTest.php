@@ -97,11 +97,32 @@ class PollDashboardTest extends \TestCase
         ];
 
         $this->post(route('poll.options.add', [ 'id' => $poll->id ]), $options)
-            ->assertResponseStatus(200)
-            ->seeInDatabase('options', [
+            ->assertResponseStatus(302)
+            ->assertSessionHas('success');
+
+        $this->seeInDatabase('options', [
                  'name' => $options['options'][0],
                  'poll_id' => $poll->id
-            ]);
+        ]);
+    }
+
+    /** @test */
+    public function an_admin_can_not_add_new_empty_options()
+    {
+        $this->beAdmin();
+
+        $poll = factory(Poll::class)->create();
+
+        $options = [
+            'options' => [ '' ]
+        ];
+
+        $this->post(route('poll.options.add', [ 'id' => $poll->id ]), $options);
+
+        $this->dontSeeInDatabase('options', [
+                 'name' => $options['options'][0],
+                 'poll_id' => $poll->id
+        ]);
     }
 
     /** @test */
