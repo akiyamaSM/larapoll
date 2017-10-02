@@ -1,8 +1,8 @@
 <?php
 
-$pref = config('larapoll_config.prefix');
+$prefix = config('larapoll_config.prefix');
 
-Route::group(['namespace' => 'Inani\Larapoll\Http\Controllers', 'prefix' => 'larapoll'], function(){
+Route::group(['namespace' => 'Inani\Larapoll\Http\Controllers', 'prefix' => $prefix], function(){
     Route::get('/admin', ['uses' => 'PollManagerController@home', 'as' => 'poll.home']);
     Route::get('/admin/polls', ['uses' => 'PollManagerController@index', 'as' => 'poll.index']);
     Route::get('/admin/polls/create', ['uses' => 'PollManagerController@create', 'as' => 'poll.create']);
