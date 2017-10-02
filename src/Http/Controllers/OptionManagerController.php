@@ -4,6 +4,7 @@ namespace Inani\Larapoll\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Inani\Larapoll\Helpers\PollHandler;
 use Inani\Larapoll\Http\Request\AddOptionsRequest;
 use Inani\Larapoll\Poll;
 
@@ -48,6 +49,10 @@ class OptionManagerController extends Controller
             return redirect(route('poll.index'))
                 ->with('success', 'Poll options have been removed successfully');
         }catch (\Exception $e){
+            $message = PollHandler::getMessage($e);
+
+            return back()
+                ->withErrors($message);
         }
     }
 

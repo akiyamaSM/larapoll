@@ -34,7 +34,7 @@
                 </div>
                 <!-- Create Form Submit -->
                 <div class="form-group">
-                    <input name="Delete" type="submit" value="Delete" class="btn btn-primary form-control" >
+                    <input name="Delete" type="submit" value="Delete" class="btn btn-danger form-control" >
                 </div>
             </form>
         </div>
