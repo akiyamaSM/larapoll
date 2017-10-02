@@ -191,7 +191,7 @@ class PollDashboardTest extends \TestCase
             'count_check' => 2,
         ];
         $this->post(route('poll.update', $poll->id), $options)
-            ->assertResponseStatus(200)
+            ->assertResponseStatus(302)
             ->assertEquals(2, Poll::findOrFail($poll->id)->maxCheck);
     }
 
@@ -213,7 +213,7 @@ class PollDashboardTest extends \TestCase
         ];
 
         $this->post(route('poll.update', $poll->id), $options)
-            ->assertResponseStatus(200)
+            ->assertResponseStatus(302)
             ->assertTrue(Poll::findOrFail($poll->id)->isLocked());
     }
 
@@ -232,11 +232,10 @@ class PollDashboardTest extends \TestCase
 
         $this->assertTrue($poll->lock());
         $options = [
-            'close' => 0,
         ];
 
         $this->post(route('poll.update', $poll->id), $options)
-            ->assertResponseStatus(200)
+            ->assertResponseStatus(302)
             ->assertFalse(Poll::findOrFail($poll->id)->isLocked());
     }
 
