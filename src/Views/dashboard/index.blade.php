@@ -24,6 +24,8 @@
                     <th>Votes</th>
                     <th>State</th>
                     <th>Edit</th>
+                    <th>Add Options</th>
+                    <th>Remove Options</th>
                     <th>Remove</th>
                     <th>Lock/Unlock</th>
                 </tr>
@@ -45,6 +47,16 @@
                         <td>
                             <a class="btn btn-info" href="{{ route('poll.edit', $poll->id) }}">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-success" href="{{ route('poll.options.push', $poll->id) }}">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-warning" href="{{ route('poll.options.remove', $poll->id) }}">
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
                             </a>
                         </td>
                         <td>
