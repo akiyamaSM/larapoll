@@ -31,7 +31,7 @@
                 <ul id="options">
                     <li>
                         <input type="text" name="options[0]" class="form-control" >
-                            <span class='remove' onclick='remove(this)'>X</span> <br>
+                        <span class='remove' onclick='remove(this)'>X</span> <br>
                     </li>
                 </ul>
                 <input type='button' value='add to list' id='add' />
