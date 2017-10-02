@@ -35,11 +35,13 @@ class PollHandler {
         }
 
         if(array_key_exists('close', $data)){
-            if($data['close']){
+            if(isset($data['close']) && $data['close']){
                 $poll->lock();
             }else{
                 $poll->unLock();
             }
+        }else{
+            $poll->unLock();
         }
     }
 }

@@ -66,10 +66,14 @@ class PollManagerController extends Controller
      *
      * @param Poll $poll
      * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Poll $poll, Request $request)
     {
         PollHandler::modify($poll, $request->all());
+
+        return redirect(route('poll.index'))
+            ->with('success', 'Your poll has been updated successfully');
     }
 
     /**
