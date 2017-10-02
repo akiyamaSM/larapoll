@@ -65,9 +65,8 @@ trait PollManipulator
         $oldOptions = [];
         $elements = $this->options()->pluck('id');
         foreach($options as $option){
-
-            if(is_int($option)){
-
+            if(is_numeric($option) && is_int(intval($option))){
+                $option = intval($option);
                 $option = Option::findOrFail($option);
                 if($option->isVoted())
                     throw new RemoveVotedOptionException();
@@ -99,11 +98,14 @@ trait PollManipulator
             return Option::destroy($oldOptions) == $count;
         }
 
+        // checkbox case
+
         if($diff <= $this->maxCheck)
             throw new CheckedOptionsException();
 
-        $count = count($elements);
-        return Option::destroy($elements) == $count;
+        $count = count($oldOptions);
+
+        return Option::destroy($oldOptions) == $count;
     }
 
     /**
