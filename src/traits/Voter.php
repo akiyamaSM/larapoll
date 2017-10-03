@@ -56,7 +56,7 @@ trait Voter
             throw new \InvalidArgumentException("selected more options {$countVotes} than the limited {$this->poll->maxCheck}");
 
         array_walk($options, function (&$val){
-            if(! is_int($val))
+            if(! is_numeric($val))
                 throw new \InvalidArgumentException("Only id are accepted");
         });
 
