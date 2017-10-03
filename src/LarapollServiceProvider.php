@@ -2,6 +2,7 @@
 namespace Inani\Larapoll;
 
 use Illuminate\Support\ServiceProvider;
+use Inani\Larapoll\Helpers\PollWriter;
 
 class LarapollServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,7 @@ class LarapollServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
+        $this->registerPollWriter();
     }
 
     /**
@@ -39,5 +40,17 @@ class LarapollServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/config/config.php' => config_path('larapoll_config.php'),
         ]);
+    }
+
+    /**
+     * Register the poll writer instance.
+     *
+     * @return void
+     */
+    protected function registerPollWriter()
+    {
+        $this->app->singleton('pollwritter', function ($app) {
+            return new PollWriter();
+        });
     }
 }
