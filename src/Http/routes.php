@@ -16,4 +16,5 @@ Route::group(['namespace' => 'Inani\Larapoll\Http\Controllers', 'prefix' => $pre
     Route::post('/admin/polls/{poll}/options/add', ['uses' => 'OptionManagerController@add', 'as' => 'poll.options.add']);
     Route::get('/admin/polls/{poll}/options/remove', ['uses' => 'OptionManagerController@delete', 'as' => 'poll.options.remove']);
     Route::delete('/admin/polls/{poll}/options/remove', ['uses' => 'OptionManagerController@remove', 'as' => 'poll.options.remove']);
+    Route::post('/vote/polls/{poll}', ['uses' => 'VoteManagerController@vote', 'as' => 'poll.vote']);
 });
