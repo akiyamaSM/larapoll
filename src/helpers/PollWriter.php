@@ -13,7 +13,7 @@ class PollWriter {
      * @param $poll_id
      * @param $voter
      */
-    public static function draw($poll_id, $voter)
+    public function draw($poll_id, $voter)
     {
         $poll = Poll::findOrFail($poll_id);
 
@@ -22,36 +22,35 @@ class PollWriter {
         }
 
         if($poll->isRadio()){
-            return static::drawRadio($poll);
+            return $this->drawRadio($poll);
         }
-        return static::drawCheckbox($poll);
+        return $this->drawCheckbox($poll);
     }
 
 
-    public static function drawCheckbox(Poll $poll)
+    public function drawCheckbox(Poll $poll)
     {
         $options = $poll->options;
-        dd($options);
     }
 
-    public static function drawRadio(Poll $poll)
+    public function drawRadio(Poll $poll)
     {
         $options = $poll->options->pluck('name', 'id');
-        static::showFeedBack();
-        static::startForm($poll->id);
-            static::drawStartHeaderPanel();
-                static::drawHeader($poll->question);
-            static::drawEndHeaderPanel();
+        $this->showFeedBack();
+        $this->startForm($poll->id);
+            $this->drawStartHeaderPanel();
+                $this->drawHeader($poll->question);
+            $this->drawEndHeaderPanel();
 
-            static::drawStartOptionsPanel();
+            $this->drawStartOptionsPanel();
                 foreach($options as $id => $name){
-                    static::drawOption($id, $name);
+                    $this->drawOption($id, $name);
                 }
-            static::drawEndOptionsPanel();
-        static::endForm();
+            $this->drawEndOptionsPanel();
+        $this->endForm();
     }
 
-    public static function showFeedBack()
+    public function showFeedBack()
     {
         if(Session::has('errors')){
             echo '<div class="alert alert-success">';
@@ -66,12 +65,12 @@ class PollWriter {
     }
 
 
-    public static function startForm($id)
+    public function startForm($id)
     {
         echo '<form method="POST" action="'. route('poll.vote', $id).'" >';
     }
     
-    public static function endForm()
+    public function endForm()
     {
         echo '<div class="panel-footer">
                     <input type="submit" class="btn btn-primary btn-sm" value="Vote" />
@@ -79,16 +78,16 @@ class PollWriter {
         </form>';
     }
 
-    public static function drawStartHeaderPanel()
+    public function drawStartHeaderPanel()
     {
         echo '<div class="panel panel-primary">';
     }
-    public static function drawEndHeaderPanel()
+    public function drawEndHeaderPanel()
     {
         echo '</div>';
     }
 
-    public static function drawHeader($question)
+    public function drawHeader($question)
     {
         echo '
         <div class="panel-heading">
@@ -98,19 +97,19 @@ class PollWriter {
         </div>';
     }
 
-    public static function drawStartOptionsPanel()
+    public function drawStartOptionsPanel()
     {
         echo '
         <div class="panel-body">
                     <ul class="list-group">';
     }
 
-    public static function drawEndOptionsPanel()
+    public function drawEndOptionsPanel()
     {
         echo '                    </ul>
                 </div>';
     }
-    public static function drawOption($id, $name)
+    public function drawOption($id, $name)
     {
         echo '
             <li class="list-group-item">
