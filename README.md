@@ -104,10 +104,22 @@ $poll->results()->inOrder();
 
 ## CRUD HANDLER
 ### Set up the admin middelware's name
-A larapoll_config.php file will be added where you can put the name of the middelware used to protect the access
-Add this line in the .env file mentioning the name of the middelware
+A larapoll_config.php file will be added where you can put the name of the middelware used to protect the access and other things like pagination and prefix to protect your routes
+Add this line in the .env too
 
 ```php
-ADMIN_AUTH_MIDDELWARE = admin
+LARAPOLL_ADMIN_AUTH_MIDDELWARE = auth
+LARAPOLL_PAGINATION = 10
+LARAPOLL_PREFIX = Larapoll
 ```
+
+## FRONT END USE
+With Larapoll its easy to integrate a poll for users to vote, you only have to specify two things
+- the ID of the poll 
+- the user(voter) instance
+
+```php
+{{ PollWriter::draw(77, auth()->user()) }}
+```
+
 
