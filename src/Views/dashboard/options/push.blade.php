@@ -2,6 +2,20 @@
 @section('title')
     Polls- Add new Options
 @endsection
+@section('style')
+    <style>
+        .old_options, #options, .button-add {
+            list-style-type: none;
+        }
+
+        .add-input {
+            width: 80%;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container">
         <ol class="breadcrumb">
@@ -30,11 +44,22 @@
                 </ul>
                 <ul id="options">
                     <li>
-                        <input type="text" name="options[0]" class="form-control" >
-                        <span class='remove' onclick='remove(this)'>X</span> <br>
+                        <input type="text" name="options[0]" class="form-control add-input" placeholder="Insert your option" >
+                        <a class="btn btn-danger" href="#" onclick='remove(this)'>
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                        </a>
                     </li>
                 </ul>
-                <input type='button' value='add to list' id='add' />
+
+                <ul>
+                    <li class="button-add">
+                        <div class="form-group">
+                            <a class="btn btn-success" id="add">
+                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
                 <!-- Create Form Submit -->
                 <div class="form-group">
                     <input name="Add" type="submit" value="Add" class="btn btn-primary form-control" >
@@ -51,7 +76,7 @@
         }
         document.getElementById("add").onclick = function() {
             var e = document.createElement('li');
-            e.innerHTML = "<input type='text' name='options[]' /> <span class='remove' onclick='remove(this)'>X</span> <br/>";
+            e.innerHTML = "<input type='text' name='options[]' class='form-control add-input' placeholder='Insert your option' /><a class='btn btn-danger' href='#' onclick='remove(this)'><i class='fa fa-minus-circle' aria-hidden='true'></i></a>";
             document.getElementById("options").appendChild(e);
         }
     </script>
