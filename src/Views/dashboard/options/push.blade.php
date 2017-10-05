@@ -44,10 +44,10 @@
                 </ul>
                 <ul id="options">
                     <li>
-                        <input type="text" name="options[0]" class="form-control add-input" placeholder="Insert your option" >
-                        <a class="btn btn-danger" href="#" onclick='remove(this)'>
-                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                        </a>
+                        <input type="text" name="options[0]" class="form-control add-input" placeholder="Insert your option" />
+                            <a class="btn btn-danger" href="#" onclick='remove(this)'>
+                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            </a>
                     </li>
                 </ul>
 
@@ -76,7 +76,7 @@
         }
         document.getElementById("add").onclick = function() {
             var e = document.createElement('li');
-            e.innerHTML = "<input type='text' name='options[]' class='form-control add-input' placeholder='Insert your option' /><a class='btn btn-danger' href='#' onclick='remove(this)'><i class='fa fa-minus-circle' aria-hidden='true'></i></a>";
+            e.innerHTML = "<input type='text' name='options[]' class='form-control add-input' placeholder='Insert your option' /> <a class='btn btn-danger' href='#' onclick='remove(this)'><i class='fa fa-minus-circle' aria-hidden='true'></i></a>";
             document.getElementById("options").appendChild(e);
         }
     </script>

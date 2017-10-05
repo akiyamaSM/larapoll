@@ -5,8 +5,8 @@
 @section('content')
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Polls</a></li>
+            <li><a href="{{ route('poll.home') }}">Home</a></li>
+            <li><a href="{{ route('poll.index') }}">Polls</a></li>
             <li class="active">Create Poll</li>
         </ol>
     <div class="well col-md-8 col-md-offset-2">

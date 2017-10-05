@@ -2,10 +2,17 @@
 @section('title')
     Polls- Listing
 @endsection
+@section('style')
+    <style>
+        .table td, .table th {
+            text-align: center;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container">
         <ol class="breadcrumb">
-            <li><a href="#">Home</a></li>
+            <li><a href="{{ route('poll.home') }}">Home</a></li>
             <li class="active">Polls</li>
         </ol>
         @if(Session::has('success'))
@@ -45,17 +52,17 @@
                             @endif
                         </td>
                         <td>
-                            <a class="btn btn-info" href="{{ route('poll.edit', $poll->id) }}">
+                            <a class="btn btn-info btn-sm" href="{{ route('poll.edit', $poll->id) }}">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             </a>
                         </td>
                         <td>
-                            <a class="btn btn-success" href="{{ route('poll.options.push', $poll->id) }}">
+                            <a class="btn btn-success btn-sm" href="{{ route('poll.options.push', $poll->id) }}">
                                 <i class="fa fa-plus-circle" aria-hidden="true"></i>
                             </a>
                         </td>
                         <td>
-                            <a class="btn btn-warning" href="{{ route('poll.options.remove', $poll->id) }}">
+                            <a class="btn btn-warning btn-sm" href="{{ route('poll.options.remove', $poll->id) }}">
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i>
                             </a>
                         </td>
@@ -63,7 +70,7 @@
                             <form action="{{ route('poll.remove', $poll->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-danger">
+                                <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </button>
                             </form>
@@ -74,7 +81,7 @@
                             <form action="{{ route($route, $poll->id) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('PATCH') }}
-                                <button type="submit" class="btn">
+                                <button type="submit" class="btn btn-sm">
                                     <i class="{{ $fa }}" aria-hidden="true"></i>
                                 </button>
                             </form>

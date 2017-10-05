@@ -21,6 +21,10 @@
         .create-btn{
             margin-top: 7px;
         }
+
+        .label, .btn, .form-control{
+            border-radius: 0px;
+        }
     </style>
 
     @yield('style')
