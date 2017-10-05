@@ -19,7 +19,7 @@ class PollWriter {
     {
         $poll = Poll::findOrFail($poll_id);
 
-        if($voter->hasVoted($poll_id)){
+        if($voter->hasVoted($poll_id) || $poll->isLocked()){
             return $this->drawResult($poll);
         }
 

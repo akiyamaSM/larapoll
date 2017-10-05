@@ -4,6 +4,11 @@ namespace Inani\Larapoll\Traits;
 
 trait PollWriterResults
 {
+    /**
+     * Draw the results of voting
+     *
+     * @param $poll
+     */
     public function drawResult($poll)
     {
         $total = $poll->votes->count();
@@ -16,11 +21,22 @@ trait PollWriterResults
     }
 
 
+    /**
+     * The header text
+     *
+     * @param $question
+     */
     public function drawResultHeader($question)
     {
         echo "<h5>Poll: {$question}</h5>";
     }
 
+    /**
+     * Draw each option result
+     *
+     * @param $result
+     * @param $total
+     */
     public function drawResultOption($result, $total)
     {
         $votes = $result['votes'];
