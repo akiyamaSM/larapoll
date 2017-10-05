@@ -6,12 +6,21 @@ use Inani\Larapoll\Poll;
 
 trait PollWriterVoting
 {
-
+    /**
+     * Drawing the poll for checkbox case
+     *
+     * @param Poll $poll
+     */
     public function drawCheckbox(Poll $poll)
     {
         $options = $poll->options;
     }
 
+    /**
+     * Drawing the poll for the radio case
+     *
+     * @param Poll $poll
+     */
     public function drawRadio(Poll $poll)
     {
         $options = $poll->options->pluck('name', 'id');
@@ -29,6 +38,9 @@ trait PollWriterVoting
         $this->endForm();
     }
 
+    /**
+     * Print errors/success messages
+     */
     public function showFeedBack()
     {
         if(Session::has('errors')){
@@ -43,11 +55,19 @@ trait PollWriterVoting
         }
     }
 
+    /**
+     * Draw the start form tag
+     *
+     * @param $id
+     */
     public function startForm($id)
     {
         echo '<form method="POST" action="'. route('poll.vote', $id).'" >';
     }
 
+    /**
+     *  Close the form tag
+     */
     public function endForm()
     {
         echo '<div class="panel-footer">
@@ -56,15 +76,27 @@ trait PollWriterVoting
         </form>';
     }
 
+    /**
+     *  Start Header Panel
+     */
     public function drawStartHeaderPanel()
     {
         echo '<div class="panel panel-primary">';
     }
+
+    /**
+     *  End of header Panel
+     */
     public function drawEndHeaderPanel()
     {
         echo '</div>';
     }
 
+    /**
+     * Draw the header block
+     *
+     * @param $question
+     */
     public function drawHeader($question)
     {
         echo '
@@ -75,6 +107,9 @@ trait PollWriterVoting
         </div>';
     }
 
+    /**
+     *  Start of the list Panel
+     */
     public function drawStartOptionsPanel()
     {
         echo '
@@ -82,11 +117,21 @@ trait PollWriterVoting
                     <ul class="list-group">';
     }
 
+    /**
+     *  End of the list Panel
+     */
     public function drawEndOptionsPanel()
     {
         echo '                    </ul>
                 </div>';
     }
+
+    /**
+     * Draw the radio of option
+     *
+     * @param $id
+     * @param $name
+     */
     public function drawOption($id, $name)
     {
         echo '
