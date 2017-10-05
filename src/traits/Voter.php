@@ -44,7 +44,7 @@ trait Voter
         if($this->poll->isLocked())
             throw new VoteInClosedPollException();
 
-        if($this->hasVoted())
+        if($this->hasVoted($this->poll))
             throw new \Exception("User can not vote again!");
 
         // if is Radio and voted for many options
@@ -66,11 +66,20 @@ trait Voter
     /**
      * Check if he can vote
      *
+     * @param $poll_id
      * @return bool
      */
-    public function hasVoted()
+    public function hasVoted($poll_id)
     {
-        return false;
+        $result = Poll
+            ::join('options', 'polls.id', '=', 'options.poll_id')
+            ->join('votes', 'votes.option_id', '=', 'options.id')
+            ->select('option_id')
+            ->where('user_id', $this->getKey())
+            ->where('poll_id', $poll_id)
+            ->getQuery()
+            ->get();
+        return count($result) != 0;
     }
 
     /**

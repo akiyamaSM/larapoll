@@ -19,7 +19,7 @@ class PollWriter {
     {
         $poll = Poll::findOrFail($poll_id);
 
-        if($voter->hasVoted()){
+        if($voter->hasVoted($poll_id)){
             return $this->drawResult($poll);
         }
 
