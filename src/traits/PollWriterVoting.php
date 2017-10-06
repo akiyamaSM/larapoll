@@ -13,7 +13,32 @@ trait PollWriterVoting
      */
     public function drawCheckbox(Poll $poll)
     {
-        $options = $poll->options;
+        $options = $poll->options->pluck('name', 'id');
+        $this->startForm($poll->id);
+        $this->drawStartHeaderPanel();
+        $this->drawHeader($poll->question);
+        $this->drawEndHeaderPanel();
+
+        foreach($options as $id => $name){
+            $this->drawOptionCheckbox($id, $name);
+        }
+        $this->endForm();
+    }
+
+    /**
+     * Draw checkbox option
+     *
+     * @param $id
+     * @param $name
+     */
+    public function drawOptionCheckbox($id, $name)
+    {
+        echo "
+            <label>
+				<input type='checkbox' name='options[]' value={$id}> {$name}
+			</label>
+			<br/>
+        ";
     }
 
     /**
@@ -24,7 +49,6 @@ trait PollWriterVoting
     public function drawRadio(Poll $poll)
     {
         $options = $poll->options->pluck('name', 'id');
-        $this->showFeedBack();
         $this->startForm($poll->id);
         $this->drawStartHeaderPanel();
         $this->drawHeader($poll->question);
