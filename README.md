@@ -6,7 +6,7 @@ A Laravel package to manage your polls
 First, install the package through Composer.
 
 ```bash
-composer require inani/larapoll
+composer require inani/larapoll ^2.0
 ```
 
 Then include the service provider inside `config/app.php`.
