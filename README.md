@@ -57,12 +57,12 @@ $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
                      ->maxSelection() // you can ignore it as well
                      ->generate();
 $poll->isRadio(); // true
-$poll->isCheckable();// false
+$poll->isCheckable(); // false
 $poll->optionsNumber(); // 4
 ```
 ### attach and detach options to a poll
 ```php
-// too add new elements 
+// to add new elements 
 $bool = $poll->attach([
             'Yii', 'CodeIgniter'
 ]);
@@ -103,12 +103,12 @@ $poll->results()->inOrder();
 ```
 
 ## CRUD HANDLER
-### Set up the admin middelware's name
-A larapoll_config.php file will be added where you can put the name of the middelware used to protect the access and other things like pagination and prefix to protect your routes
+### Set up the admin middleware's name
+A larapoll_config.php file will be added where you can put the name of the middleware used to protect the access and other things like pagination and prefix to protect your routes
 Add this line in the .env too
 
 ```php
-LARAPOLL_ADMIN_AUTH_MIDDELWARE = auth
+LARAPOLL_ADMIN_AUTH_MIDDLEWARE = auth
 LARAPOLL_PAGINATION = 10
 LARAPOLL_PREFIX = Larapoll
 ```
