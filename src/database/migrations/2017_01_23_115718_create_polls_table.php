@@ -12,7 +12,7 @@ class CreatePollsTable extends Migration
      */
     public function up()
     {
-        Schema::create('polls', function (Blueprint $table) {
+        Schema::create('larapoll_polls', function (Blueprint $table) {
             $table->increments('id');
             $table->string('question');
             $table->integer('maxCheck')->default(1);
@@ -28,6 +28,6 @@ class CreatePollsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('polls');
+        Schema::drop('larapoll_polls');
     }
 }

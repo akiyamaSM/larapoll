@@ -144,6 +144,7 @@ trait PollManipulator
     public function unLock()
     {
         $this->isClosed = 0;
+
         return $this->save();
     }
 
@@ -156,6 +157,7 @@ trait PollManipulator
     public function canSelect($count)
     {
         $this->maxCheck = $count;
+
         return $this->save();
     }
 

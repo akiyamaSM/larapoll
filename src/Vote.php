@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vote extends Model
 {
-    protected $table = 'votes';
+    protected $table = 'larapoll_votes';
+
+    public function option()
+    {
+        return $this->belongsTo(Option::class);
+    }
 }

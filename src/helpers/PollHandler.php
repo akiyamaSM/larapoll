@@ -7,7 +7,6 @@ use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 use Inani\Larapoll\Exceptions\OptionsNotProvidedException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Poll;
-use Psy\Exception\Exception;
 
 class PollHandler {
 
@@ -16,6 +15,9 @@ class PollHandler {
      *
      * @param $request
      * @return Poll
+     * @throws CheckedOptionsException
+     * @throws OptionsInvalidNumberProvidedException
+     * @throws OptionsNotProvidedException
      */
     public static function createFromRequest($request)
     {
@@ -33,23 +35,36 @@ class PollHandler {
         return $poll;
     }
 
+    /**
+     * Modify The number of votable options
+     *
+     * @param Poll $poll
+     * @param $data
+     */
     public static function modify(Poll $poll, $data)
     {
         if(array_key_exists('count_check', $data)){
-            $poll->canSelect($data['count_check']);
+            if($data['count_check'] < $poll->options()->count()){
+                $poll->canSelect($data['count_check']);
+            }
         }
 
         if(array_key_exists('close', $data)){
             if(isset($data['close']) && $data['close']){
                 $poll->lock();
-            }else{
-                $poll->unLock();
+                return;
             }
-        }else{
-            $poll->unLock();
         }
+
+        $poll->unLock();
     }
 
+    /**
+     * Get Messages
+     *
+     * @param \Exception $e
+     * @return string
+     */
     public static function getMessage(\Exception $e)
     {
         if($e instanceof OptionsInvalidNumberProvidedException || $e instanceof OptionsNotProvidedException)

@@ -21,5 +21,15 @@
     "require-dev": {
       "fzaninotto/faker": "~1.4",
       "phpunit/phpunit": "~4.0"
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "Inani\\Larapoll\\LarapollServiceProvider"
+        ],
+        "aliases": {
+          "PollWriter": "Inani\\Larapoll\\PollWriterFacade"
+        }
+      }
     }
 }

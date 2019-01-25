@@ -3,9 +3,10 @@
 namespace Inani\Larapoll\Http\Request;
 
 
-use App\Http\Requests\Request;
 
-class AddOptionsRequest extends Request
+use Illuminate\Foundation\Http\FormRequest;
+
+class AddOptionsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

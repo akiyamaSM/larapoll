@@ -14,6 +14,8 @@ class Poll extends Model
 
     protected $fillable = ['question'];
 
+    protected $table = 'larapoll_polls';
+
     /**
      * A poll has many options related to
      *

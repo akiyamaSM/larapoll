@@ -12,13 +12,13 @@ class CreateVotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('votes', function (Blueprint $table) {
+        Schema::create('larapoll_votes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('option_id');
             $table->timestamps();
 
-            $table->foreign('option_id')->references('id')->on('options');
+            $table->foreign('option_id')->references('id')->on('larapoll_options');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }
@@ -30,6 +30,6 @@ class CreateVotesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('votes');
+        Schema::drop('larapoll_votes');
     }
 }

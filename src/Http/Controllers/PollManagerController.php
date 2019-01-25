@@ -20,6 +20,11 @@ class PollManagerController extends Controller
         $this->middleware( config('larapoll_config.admin_auth') );
     }
 
+    /**
+     * Dashboard Home
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function home()
     {
         return view('larapoll::dashboard.home');

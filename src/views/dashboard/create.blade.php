@@ -22,12 +22,12 @@
             <!-- Question Input -->
             <div class="form-group">
                 <label for="question">Question:</label>
-                <input type="text" id="question" name="question" class="form-control"/>
+                <input type="text" id="question" name="question" class="form-control" value="{{ old('question') }}"/>
             </div>
             <ul class="options">
                 <li>
-                    <input id="option_1" type="text" name="options[0]" class="form-control"/>
-                    <input id="option_2" type="text" name="options[1]" class="form-control"/>
+                    <input id="option_1" type="text" name="options[0]" class="form-control" value="{{ old('options.0') }}"/>
+                    <input id="option_2" type="text" name="options[1]" class="form-control" value="{{ old('options.1') }}" />
                 </li>
             </ul>
             <!-- Create Form Submit -->

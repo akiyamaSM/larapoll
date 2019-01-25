@@ -2,10 +2,9 @@
 
 namespace Inani\Larapoll\Http\Request;
 
+use Illuminate\Foundation\Http\FormRequest;
 
-use App\Http\Requests\Request;
-
-class PollCreationRequest extends Request
+class PollCreationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,7 +33,6 @@ class PollCreationRequest extends Request
     {
         return [
             'question.required' => 'Question should be asked',
-            'options.0.required' => 'Two options must be used at least',
             'options.1.required' => 'Two options must be used at least',
         ];
     }

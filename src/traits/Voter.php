@@ -8,6 +8,7 @@ use Inani\Larapoll\Exceptions\PollNotSelectedToVoteException;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Option;
 use Inani\Larapoll\Poll;
+use Inani\Larapoll\Vote;
 
 trait Voter
 {
@@ -71,15 +72,9 @@ trait Voter
      */
     public function hasVoted($poll_id)
     {
-        $result = Poll
-            ::join('options', 'polls.id', '=', 'options.poll_id')
-            ->join('votes', 'votes.option_id', '=', 'options.id')
-            ->select('option_id')
-            ->where('user_id', $this->getKey())
-            ->where('poll_id', $poll_id)
-            ->getQuery()
-            ->get();
-        return count($result) != 0;
+        return $this->whereHas('options', function ($query) use ($poll_id){
+            return $query->where('poll_id', $poll_id);
+        })->count() !== 0;
     }
 
     /**
@@ -89,6 +84,7 @@ trait Voter
      */
     public function options()
     {
-        return $this->belongsToMany(Option::class, 'votes')->withTimestamps();
+        return $this->belongsToMany(Option::class, 'larapoll_votes')->withTimestamps();
     }
+
 }
