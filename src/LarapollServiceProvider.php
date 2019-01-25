@@ -33,7 +33,7 @@ class LarapollServiceProvider extends ServiceProvider
             => base_path('database/migrations/2017_01_25_111721_create_votes_table.php'),
         ]);
         // routes
-        include __DIR__ . '/Http/routes.php';
+        $this->loadRoutesFrom(__DIR__.'/Http/routes.php');
         // views
         $this->loadViewsFrom(__DIR__.'/views', 'larapoll');
 

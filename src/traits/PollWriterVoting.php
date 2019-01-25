@@ -87,6 +87,7 @@ trait PollWriterVoting
     public function startForm($id)
     {
         echo '<form method="POST" action="'. route('poll.vote', $id).'" >';
+        echo csrf_field();
     }
 
     /**

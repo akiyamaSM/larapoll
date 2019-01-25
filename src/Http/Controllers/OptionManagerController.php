@@ -10,16 +10,6 @@ use Inani\Larapoll\Poll;
 
 class OptionManagerController extends Controller
 {
-
-    /**
-     *  Constructor
-     *
-     */
-    public function __construct()
-    {
-        $this->middleware( config('larapoll_config.admin_auth') );
-    }
-
     /**
      * Add new options to the poll
      *

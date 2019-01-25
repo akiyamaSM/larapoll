@@ -9,14 +9,16 @@ use Inani\Larapoll\Traits\PollWriterVoting;
 class PollWriter {
     use PollWriterResults,
         PollWriterVoting;
+
     /**
      * Draw a Poll
      *
      * @param $poll_id
-     * @param $voter
      */
-    public function draw($poll_id, $voter)
+    public function draw($poll_id)
     {
+        $voter = auth(config('larapoll_config.admin_guard'))->user();
+
         $poll = Poll::findOrFail($poll_id);
         $this->showFeedBack();
         if($voter->hasVoted($poll_id) || $poll->isLocked()){

@@ -8,7 +8,6 @@ use Inani\Larapoll\Poll;
 
 class VoteManagerController extends Controller
 {
-
     /**
      * Make a Vote
      *
@@ -19,7 +18,7 @@ class VoteManagerController extends Controller
     public function vote(Poll $poll, Request $request)
     {
         try{
-            $vote = $request->user()
+            $vote = $request->user(config('admin_guard'))
                 ->poll($poll)
                 ->vote($request->get('options'));
             if($vote){

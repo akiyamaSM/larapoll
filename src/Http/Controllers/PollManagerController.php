@@ -10,16 +10,6 @@ use Inani\Larapoll\Poll;
 
 class PollManagerController extends Controller
 {
-
-    /**
-     *  Constructor
-     *
-     */
-    public function __construct()
-    {
-        $this->middleware( config('larapoll_config.admin_auth') );
-    }
-
     /**
      * Dashboard Home
      *
@@ -47,6 +37,9 @@ class PollManagerController extends Controller
      *
      * @param PollCreationRequest $request
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Inani\Larapoll\Exceptions\CheckedOptionsException
+     * @throws \Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException
+     * @throws \Inani\Larapoll\Exceptions\OptionsNotProvidedException
      */
     public function store(PollCreationRequest $request)
     {
