@@ -47,8 +47,10 @@
                         <td>
                             @if($poll->isLocked())
                                 <span class="label label-danger">Closed</span>
-                            @else
-                                <span class="label label-success">Open</span>
+                            @elseif($poll->isComingSoon())
+                                <span class="label label-info">Soon</span>
+                            @elseif($poll->isRunning())
+                                <span class="label label-success">Started</span>
                             @endif
                         </td>
                         <td>

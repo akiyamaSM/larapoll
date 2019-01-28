@@ -132,7 +132,8 @@ trait PollManipulator
             $option->updateTotalVotes();
         }
 
-        $this->isClosed = 1;
+        $this->isClosed = now();
+
         return $this->save();
     }
 
@@ -143,7 +144,7 @@ trait PollManipulator
      */
     public function unLock()
     {
-        $this->isClosed = 0;
+        $this->isClosed = null;
 
         return $this->save();
     }

@@ -73,6 +73,32 @@ trait PollCreator
     }
 
     /**
+     * It starts at
+     *
+     * @param null $at
+     * @return $this
+     */
+    public function startsAt($at = null)
+    {
+        $this->starts_at = !is_null($at) ? $at : now() ;
+
+        return $this;
+    }
+
+    /**
+     * It ends at
+     *
+     * @param null $at
+     * @return $this
+     */
+    public function endsAt($at = null)
+    {
+        $this->ends_at = !is_null($at) ? $at : now()->addDays(7);
+
+        return $this;
+    }
+
+    /**
      * Generate the poll
      *
      * @return bool

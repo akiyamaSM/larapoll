@@ -30,6 +30,18 @@
                     <input id="option_2" type="text" name="options[1]" class="form-control" value="{{ old('options.1') }}" />
                 </li>
             </ul>
+
+                <div class="dates">
+                    <div class="form-group">
+                        <label for="starts_at">Starts at:</label>
+                        <input type="datetime-local" id="starts_at" name="starts_at" class="form-control" value="{{ old('starts_at') }}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="starts_at">Ends at:</label>
+                        <input type="datetime-local" id="ends_at" name="ends_at" class="form-control" value="{{ old('ends_at') }}"/>
+                    </div>
+                </div>
             <!-- Create Form Submit -->
             <div class="form-group">
                 <input name="create" type="submit" value="Create" class="btn btn-primary form-control"/>

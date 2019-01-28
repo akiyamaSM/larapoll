@@ -42,7 +42,7 @@ trait PollAccessor
      */
     public function isLocked()
     {
-        return $this->isClosed == 1;
+        return !is_null($this->isClosed);
     }
 
     /**
@@ -63,5 +63,20 @@ trait PollAccessor
     public function isOpen()
     {
         return !$this->isLocked();
+    }
+
+    public function isRunning()
+    {
+        return $this->isOpen() && $this->hasStarted();
+    }
+
+    public function hasStarted()
+    {
+        return $this->starts_at <= now();
+    }
+
+    public function isComingSoon()
+    {
+        return $this->isOpen() && now() < $this->starts_at;
     }
 }

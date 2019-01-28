@@ -25,7 +25,9 @@ class PollCreationRequest extends FormRequest
     {
         return [
             'question' => 'present|required',
-            'options.*' => 'present|required'
+            'options.*' => 'present|required',
+            'starts_at' => 'sometimes',
+            'ends_at' => 'sometimes',
         ];
     }
 

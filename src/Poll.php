@@ -16,6 +16,8 @@ class Poll extends Model
 
     protected $table = 'larapoll_polls';
 
+    protected $guarded = [''];
+
     /**
      * A poll has many options related to
      *

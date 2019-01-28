@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class CreatePollsTable extends Migration
 {
@@ -17,6 +18,8 @@ class CreatePollsTable extends Migration
             $table->string('question');
             $table->integer('maxCheck')->default(1);
             $table->integer('isClosed')->default(0);
+            $table->timestamp('starts_at');
+            $table->timestamp('ends_at');
             $table->timestamps();
         });
     }
