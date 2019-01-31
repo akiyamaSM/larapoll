@@ -57,6 +57,10 @@ class PollHandler {
             }
         }
 
+        $poll->update([
+            'question' => $data['question']
+        ]);
+
         $poll->unLock();
     }
 

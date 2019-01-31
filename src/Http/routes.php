@@ -15,7 +15,7 @@ Route::group(['namespace' => 'Inani\Larapoll\Http\Controllers', 'prefix' => $pre
     Route::get('/admin/polls', ['uses' => 'PollManagerController@index', 'as' => 'poll.index'])->middleware("$middleware:$guard");
     Route::get('/admin/polls/create', ['uses' => 'PollManagerController@create', 'as' => 'poll.create'])->middleware("$middleware:$guard");
     Route::get('/admin/polls/{poll}', ['uses' => 'PollManagerController@edit', 'as' => 'poll.edit'])->middleware("$middleware:$guard");
-    Route::post('/admin/polls/{poll}', ['uses' => 'PollManagerController@update', 'as' => 'poll.update'])->middleware("$middleware:$guard");
+    Route::patch('/admin/polls/{poll}', ['uses' => 'PollManagerController@update', 'as' => 'poll.update'])->middleware("$middleware:$guard");
     Route::delete('/admin/polls/{poll}', ['uses' => 'PollManagerController@remove', 'as' => 'poll.remove'])->middleware("$middleware:$guard");
     Route::patch('/admin/polls/{poll}/lock', ['uses' => 'PollManagerController@lock', 'as' => 'poll.lock'])->middleware("$middleware:$guard");
     Route::patch('/admin/polls/{poll}/unlock', ['uses' => 'PollManagerController@unlock', 'as' => 'poll.unlock'])->middleware("$middleware:$guard");

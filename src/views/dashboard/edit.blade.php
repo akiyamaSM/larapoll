@@ -19,10 +19,15 @@
             @endif
             <form method="POST" action=" {{ route('poll.update', $poll->id) }}">
                 {{ csrf_field() }}
+                    @method('patch')
                 <!-- Question Input -->
-                <div class="form-group">
-                    <label>{{ $poll->question }}</label>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Question: </label>
+                        <input type="text" class="form-control" name="question" value="{{ old('question', $poll->question) }}">
+                    </div>
                 </div>
+
                 <ul class="options">
                     @foreach($poll->options as $option)
                         <li>{{ $option->name }}</li>

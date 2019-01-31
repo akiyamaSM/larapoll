@@ -63,10 +63,10 @@ class PollManagerController extends Controller
      * Update the Poll
      *
      * @param Poll $poll
-     * @param Request $request
+     * @param PollCreationRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Poll $poll, Request $request)
+    public function update(Poll $poll, PollCreationRequest $request)
     {
         PollHandler::modify($poll, $request->all());
 
