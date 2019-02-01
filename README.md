@@ -128,7 +128,7 @@ With Larapoll its easy to integrate a poll for users to vote, you only have to s
 - the user(voter) instance
 
 ```php
-{{ PollWriter::draw(77, auth()->user()) }}
+{{ PollWriter::draw(77) }}
 ```
 
 
