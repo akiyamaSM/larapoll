@@ -23,6 +23,6 @@ trait PollWriterResults
         });
         $question = $poll->question;
         // Should override here the view
-        echo view('larapoll::stubs.results', compact('options', 'question'));
+        echo view(config('larapoll_config.results') ? config('larapoll_config.results') : 'larapoll::stubs.results', compact('options', 'question'));
     }
 }
