@@ -20,8 +20,8 @@ class PollWriter {
         $voter = auth(config('larapoll_config.admin_guard'))->user();
 
         $poll = Poll::findOrFail($poll_id);
-        $this->showFeedBack();
-        if($voter->hasVoted($poll_id) || $poll->isLocked()){
+
+        if(is_null($voter) || $voter->hasVoted($poll_id) || $poll->isLocked()){
             return $this->drawResult($poll);
         }
 
