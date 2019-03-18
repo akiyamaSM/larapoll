@@ -15,12 +15,12 @@ class CreateVotesTable extends Migration
     {
         Schema::create('larapoll_votes', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->string('user_id');
             $table->unsignedInteger('option_id');
             $table->timestamps();
 
             $table->foreign('option_id')->references('id')->on('larapoll_options');
-            $table->foreign('user_id')->references('id')->on('users');
+            //$table->foreign('user_id')->references('id')->on('users');
         });
     }
 

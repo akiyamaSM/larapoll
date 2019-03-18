@@ -28,6 +28,7 @@
                     <th>#</th>
                     <th>Question</th>
                     <th>Options</th>
+                    <th>Visitors allowed</th>
                     <th>Votes</th>
                     <th>State</th>
                     <th>Edit</th>
@@ -43,6 +44,7 @@
                         <th scope="row">{{ $poll->id }}</th>
                         <td>{{ $poll->question }}</td>
                         <td>{{ $poll->options_count }}</td>
+                        <td>{{ $poll->canVisitorsVote ? 'Yes' : 'No' }}</td>
                         <td>{{ $poll->votes_count }}</td>
                         <td>
                             @if($poll->isLocked())
