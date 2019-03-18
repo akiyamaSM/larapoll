@@ -12,7 +12,7 @@ class Poll extends Model
 {
     use PollCreator, PollAccessor, PollManipulator, PollQueries;
 
-    protected $fillable = ['question'];
+    protected $fillable = ['question', 'canVisitorsVote'];
 
     protected $table = 'larapoll_polls';
 
@@ -49,5 +49,15 @@ class Poll extends Model
     public function votes()
     {
         return $this->hasManyThrough(Vote::class, Option::class);
+    }
+
+    /**
+     * Check if the Guest has the right to vote
+     *
+     * @return bool
+     */
+    public function canGuestVote()
+    {
+        return $this->canVisitorsVote === 1;
     }
 }
