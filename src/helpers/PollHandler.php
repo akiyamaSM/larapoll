@@ -60,8 +60,10 @@ class PollHandler {
         }
 
         $poll->update([
-            'question' => $data['question']
+            'question' => $data['question'],
         ]);
+
+        $poll->startsAt($data['starts_at'])->endsAt($data['ends_at'])->save();
 
         $poll->unLock();
     }

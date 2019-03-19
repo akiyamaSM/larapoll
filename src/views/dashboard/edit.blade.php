@@ -44,6 +44,18 @@
                     @endfor
                 </select>
 
+                <div class="dates">
+                    <div class="form-group">
+                        <label for="starts_at">Starts at:</label>
+                        <input type="datetime-local" id="starts_at" name="starts_at" class="form-control" value="{{ old('starts_at', \Carbon\Carbon::parse($poll->starts_at)->format('Y-m-d\TH:i')) }}"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="starts_at">Ends at:</label>
+                        <input type="datetime-local" id="ends_at" name="ends_at" class="form-control" value="{{ old('ends_at', \Carbon\Carbon::parse($poll->ends_at)->format('Y-m-d\TH:i')) }}"/>
+                    </div>
+                </div>
+
                 <div class="radio">
                     <label>
                         <input type="checkbox" name="close" {{ $poll->isLocked()? 'checked':'' }}> Close
