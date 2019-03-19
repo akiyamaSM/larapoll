@@ -4,7 +4,15 @@
 @endsection
 @section('style')
     <style>
-        .old_options, #options, .button-add {
+        .errors-list{
+            list-style-type: none;
+        }
+        .create-btn{
+            display: block;
+            width: 16%;
+            float: right;
+        }
+        .old_options, .options, #options, .button-add {
             list-style-type: none;
         }
 
@@ -25,11 +33,9 @@
         </ol>
         <div class="well col-md-8 col-md-offset-2">
             @if($errors->any())
-                <ul class="alert alert-danger">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+                <div class="alert alert-danger">
+                    <span>Please fill empty inputs</span>
+                </div>
             @endif
             <form method="POST" action=" {{ route('poll.options.add', $poll->id) }}">
                 {{ csrf_field() }}
@@ -37,20 +43,26 @@
                 <div class="form-group">
                     <label for="question">{{ $poll->question }}</label>
                 </div>
-                <ul class="old_options">
-                    @foreach($poll->options as $option)
-                        <li> {{ $option->name }}</li>
-                    @endforeach
-                </ul>
-                <ul id="options">
-                    <li>
-                        <input type="text" name="options[0]" class="form-control add-input" placeholder="Insert your option" />
+                <div class="form-group">
+                    <label>Options</label>
+                    <ul class="options">
+                        @foreach($poll->options as $option)
+                            <li>
+                                <input class="form-control add-input" value="{{ $option->name }}" disabled />
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <ul id="options">
+                        <li>
+                            <input type="text" name="options[0]" class="form-control add-input" placeholder="Insert your option" />
                             <a class="btn btn-danger" href="#" onclick='remove(this)'>
                                 <i class="fa fa-minus-circle" aria-hidden="true"></i>
                             </a>
-                    </li>
-                </ul>
-
+                        </li>
+                    </ul>
+                </div>
                 <ul>
                     <li class="button-add">
                         <div class="form-group">
@@ -62,7 +74,7 @@
                 </ul>
                 <!-- Create Form Submit -->
                 <div class="form-group">
-                    <input name="Add" type="submit" value="Add" class="btn btn-primary form-control" >
+                    <input name="Add" type="submit" value="Add" class="btn btn-primary create-btn" >
                 </div>
             </form>
         </div>

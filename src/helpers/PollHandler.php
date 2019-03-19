@@ -2,11 +2,13 @@
 
 namespace Inani\Larapoll\Helpers;
 
+use Exception;
 use Inani\Larapoll\Exceptions\CheckedOptionsException;
 use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 use Inani\Larapoll\Exceptions\OptionsNotProvidedException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Poll;
+use InvalidArgumentException;
 
 class PollHandler {
 
@@ -71,10 +73,10 @@ class PollHandler {
     /**
      * Get Messages
      *
-     * @param \Exception $e
+     * @param Exception $e
      * @return string
      */
-    public static function getMessage(\Exception $e)
+    public static function getMessage(Exception $e)
     {
         if($e instanceof OptionsInvalidNumberProvidedException || $e instanceof OptionsNotProvidedException)
             return 'A poll should have two options at least';
@@ -82,5 +84,9 @@ class PollHandler {
             return 'You can not remove an option that has a vote';
         if($e instanceof CheckedOptionsException)
             return 'You should edit the number of checkable options first.';
+
+        if($e instanceof  InvalidArgumentException){
+            return $e->getMessage();
+        }
     }
 }
