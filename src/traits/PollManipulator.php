@@ -7,6 +7,7 @@ use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 use Inani\Larapoll\Exceptions\OptionsNotProvidedException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Option;
+use InvalidArgumentException;
 
 trait PollManipulator
 {
@@ -29,7 +30,7 @@ trait PollManipulator
                         'name' => $option
                     ]);
                 }else{
-                    throw new \InvalidArgumentException("Array arguments must be composed of Strings values");
+                    throw new InvalidArgumentException("Array arguments must be composed of Strings values");
                 }
             }
             return $this->options()->saveMany($newOptions);
@@ -43,7 +44,7 @@ trait PollManipulator
             );
         }
 
-        throw new \InvalidArgumentException("Invalid Argument provided");
+        throw new InvalidArgumentException("Invalid Argument provided");
     }
 
 
@@ -81,7 +82,7 @@ trait PollManipulator
                 }
 
             }else {
-                throw new \InvalidArgumentException("Array arguments must be composed of ids or option object values");
+                throw new InvalidArgumentException("Array arguments must be composed of ids or option object values");
             }
 
         }

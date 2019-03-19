@@ -33,7 +33,7 @@ class AddOptionsRequest extends FormRequest
     public function messages()
     {
         return [
-            'options.*.required' => 'Options Field Should not be empty',
+            'options.*.required' => 'Option field should not be empty',
         ];
     }
 }

@@ -4,6 +4,9 @@
 @endsection
 @section('style')
     <style>
+        .errors-list{
+            list-style-type: none;
+        }
         .clearfix{
             clear: both;
         }
@@ -33,7 +36,7 @@
         </ol>
     <div class="well col-md-8 col-md-offset-2">
             @if($errors->any())
-                <ul class="alert alert-danger">
+                <ul class="alert alert-danger errors-list">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach

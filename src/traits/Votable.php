@@ -25,7 +25,7 @@ trait Votable
      */
     public function voters()
     {
-        return $this->belongsToMany(User::class, 'votes')->withTimestamps();
+        return $this->belongsToMany(User::class, 'larapoll_votes')->withTimestamps();
     }
 
     /**
