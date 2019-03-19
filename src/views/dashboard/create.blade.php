@@ -33,7 +33,7 @@
 
             <div class="radio">
                 <label>
-                    <input type="checkbox" name="canVisitorsVote" value="1" > Allow to guests
+                    <input type="checkbox" name="canVisitorsVote" value="1" {{ old('canVisitorsVote')  == 1 ? 'checked' : ''  }} > Allow to guests
                 </label>
             </div>
 

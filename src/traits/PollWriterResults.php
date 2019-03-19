@@ -17,12 +17,12 @@ trait PollWriterResults
         $results = $poll->results()->grab();
         $options = collect($results)->map(function ($result) use ($total){
                 return (object) [
-                   'percent' => $total === 0 ? 0 : $result['votes'] / $total,
+                    'votes' => $result['votes'],
+                    'percent' => $total === 0 ? 0 : ($result['votes'] / $total) * 100,
                     'name' => $result['option']->name
                 ];
         });
         $question = $poll->question;
-        // Should override here the view
         echo view(config('larapoll_config.results') ? config('larapoll_config.results') : 'larapoll::stubs.results', compact('options', 'question'));
     }
 }
