@@ -65,16 +65,31 @@ trait PollAccessor
         return !$this->isLocked();
     }
 
+    /**
+     * Running is open and started
+     *
+     * @return bool
+     */
     public function isRunning()
     {
         return $this->isOpen() && $this->hasStarted();
     }
 
+    /**
+     * If the poll has already started
+     *
+     * @return bool
+     */
     public function hasStarted()
     {
         return $this->starts_at <= now();
     }
 
+    /**
+     * Is open and will start in the future
+     *
+     * @return bool
+     */
     public function isComingSoon()
     {
         return $this->isOpen() && now() < $this->starts_at;

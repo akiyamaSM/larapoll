@@ -14,12 +14,18 @@ class PollWriter {
      * Draw a Poll
      *
      * @param $poll_id
+     * @return string|void
      */
     public function draw($poll_id)
     {
+        $poll = Poll::findOrFail($poll_id);
+
+        if($poll->isComingSoon()){
+            return 'To start soon';
+        }
+
         $voter = auth(config('larapoll_config.admin_guard'))->user();
 
-        $poll = Poll::findOrFail($poll_id);
 
         if(is_null($voter) || $voter->hasVoted($poll_id) || $poll->isLocked()){
             return $this->drawResult($poll);
