@@ -112,12 +112,16 @@ $poll->results()->inOrder();
 ```
 
 ## CRUD HANDLER
+LaraPoll ships with a UI a system to manage polls, very easy and fast. you need practically nothing to start using it.
+[Please visit the link for the explantation of the interface.](https://medium.com/@InaniT0/create-polls-easily-using-laravel-package-larapoll-d8e520f021f5)
+
 ### Set up the admin middleware's name
 A larapoll_config.php file will be added where you can put the name of the middleware used to protect the access and other things like pagination and prefix to protect your routes
 Add this line in the .env too
 
 ```php
 LARAPOLL_ADMIN_AUTH_MIDDELWARE = auth
+LARAPOLL_ADMIN_AUTH_GUARD = web
 LARAPOLL_PAGINATION = 10
 LARAPOLL_PREFIX = Larapoll
 ```
@@ -125,10 +129,23 @@ LARAPOLL_PREFIX = Larapoll
 ## FRONT END USE
 With Larapoll its easy to integrate a poll for users to vote, you only have to specify two things
 - the ID of the poll 
-- the user(voter) instance
 
 ```php
 {{ PollWriter::draw(77) }}
 ```
+### Override views
+You can override the views related to the results page and both pages checkbox/radio via the same larapoll_config.php file in the config folder.
+
+#### Route of the vote action
+``` php
+{{ route('poll.vote', $id) }}
+```
+
+#### Data passed to result view
+- $question : the question of the poll
+- $options : array of objects holding (name, percent, votes).
+#### Data passed to the poll checkbox/radio
+- $question : the question
+- $options : holding the name and id of the option.
 
 
