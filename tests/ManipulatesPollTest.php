@@ -3,12 +3,10 @@
 namespace Inani\Larapoll\Tests;
 
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Inani\Larapoll\Poll;
 
 class ManipulatesPollTest extends LarapollTestCase
 {
-    use DatabaseTransactions;
 
     /** @test */
     public function admin_can_add_new_options()

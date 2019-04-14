@@ -5,13 +5,11 @@ namespace Inani\Larapoll\Tests;
 use App\User;
 use Inani\Larapoll\Poll;
 use InvalidArgumentException;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 
 class PollTest extends LarapollTestCase
 {
-    use DatabaseTransactions;
 
     /** @test */
     public function it_creates_new_poll()

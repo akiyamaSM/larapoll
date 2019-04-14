@@ -3,11 +3,9 @@
 namespace Inani\Larapoll\Tests;
 
 use App\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class CreatesPollTest extends LarapollTestCase
 {
-    use DatabaseTransactions;
 
     /** @test */
     public function create_form_is_shown()

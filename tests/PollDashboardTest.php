@@ -4,11 +4,9 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Inani\Larapoll\Poll;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class PollDashboardTest extends LarapollTestCase
 {
-    use DatabaseMigrations;
 
     protected $user;
 
