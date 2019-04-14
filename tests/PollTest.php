@@ -64,7 +64,7 @@ class PollTest extends LarapollTestCase
         $this->assertEquals(4, $poll->optionsNumber());
 
         $option = $poll->options()->first();
-        $this->assertTrue($poll->detach($option));
+        $this->assertTrue($poll->detach($option->id));
         $this->assertEquals(3, $poll->optionsNumber());
     }
 
@@ -227,9 +227,9 @@ class PollTest extends LarapollTestCase
 
         $id = $poll->id;
         $this->assertTrue($poll->remove());
-        $this->dontSeeInDatabase('options', [
+        $this->dontSeeInDatabase('larapoll_options', [
             'poll_id' => $id
-        ]);;
+        ]);
     }
     /**
      * Make one user
