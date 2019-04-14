@@ -97,11 +97,8 @@ trait Voter
                 ->where('larapoll_options.poll_id', $poll_id)->count();
             return $result !== 0;
         }
-        $result = $this->options()->where('poll_id', $poll->id)->count();
-        return $result !== 0;
-        // return $this->whereHas('options', function ($query) use ($poll_id) {
-        //     return $query->where('poll_id', $poll_id);
-        // })->count() !== 0;
+
+        return $this->options()->where('poll_id', $poll->id)->count() !== 0;
     }
 
     /**
