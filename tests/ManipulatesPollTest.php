@@ -6,7 +6,7 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Inani\Larapoll\Poll;
 
-class ManipulatesPollTest extends \TestCase
+class ManipulatesPollTest extends LarapollTestCase
 {
     use DatabaseTransactions;
 
@@ -30,24 +30,16 @@ class ManipulatesPollTest extends \TestCase
     }
 
     public function admin_can_remove_options()
-    {
-
-    }
+    { }
 
     public function an_error_is_shown_if_less_than_two_options_are_left()
-    {
-
-    }
+    { }
 
     public function an_admin_can_close_an_opened_poll()
-    {
-
-    }
+    { }
 
     public function an_admin_can_open_a_closed_poll()
-    {
-
-    }
+    { }
 
     public function an_admin_can_delete_a_poll()
     {

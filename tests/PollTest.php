@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 
-class PollTest extends \TestCase
+class PollTest extends LarapollTestCase
 {
     use DatabaseTransactions;
 
@@ -21,8 +21,8 @@ class PollTest extends \TestCase
         ]);
 
         $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection()
-                     ->generate();
+            ->maxSelection()
+            ->generate();
 
         $this->assertTrue($bool);
         $this->assertTrue($poll->isRadio());
@@ -37,8 +37,8 @@ class PollTest extends \TestCase
         ]);
 
         $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                    ->maxSelection()
-                    ->generate();
+            ->maxSelection()
+            ->generate();
 
         $this->assertTrue($bool);
         $this->assertTrue($poll->isRadio());
@@ -68,7 +68,6 @@ class PollTest extends \TestCase
         $option = $poll->options()->first();
         $this->assertTrue($poll->detach($option));
         $this->assertEquals(3, $poll->optionsNumber());
-
     }
 
     /** @test */
@@ -80,8 +79,8 @@ class PollTest extends \TestCase
         ]);
 
         $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection(2)
-                     ->generate();
+            ->maxSelection(2)
+            ->generate();
         $voteFor = $poll->options()->first();
         $this->assertTrue($voter->poll($poll)->vote($voteFor->getKey()));
     }
@@ -95,14 +94,12 @@ class PollTest extends \TestCase
         ]);
 
         $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection(2)
-                     ->generate();
+            ->maxSelection(2)
+            ->generate();
         $voteFor = $poll->options()->get()->take(3)->pluck('id')->all();
-        try{
+        try {
             $voter->poll($poll)->vote($voteFor);
-        }catch (\InvalidArgumentException $e){
-
-        }
+        } catch (\InvalidArgumentException $e) { }
         $this->assertNotNull($e);
     }
 
@@ -115,18 +112,17 @@ class PollTest extends \TestCase
         ]);
 
         $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection(2)
-                     ->generate();
+            ->maxSelection(2)
+            ->generate();
 
         $this->assertTrue($bool);
         $this->assertEquals(4, $poll->optionsNumber());
 
         $option = $poll->options()->first();
         $this->assertTrue($voter->poll($poll)->vote($option->getKey()));
-        try{
+        try {
             $poll->detach($option);
-        }catch (RemoveVotedOptionException $e){
-        }
+        } catch (RemoveVotedOptionException $e) { }
         $this->assertNotNull($e);
 
         $this->assertEquals(4, $poll->optionsNumber());
@@ -182,9 +178,9 @@ class PollTest extends \TestCase
         $this->assertTrue($poll->lock());
         $option = $poll->options()->first();
 
-        try{
+        try {
             $voter->poll($poll)->vote($option->getKey());
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->assertTrue($e instanceof VoteInClosedPollException);
         }
         $this->assertNotNull($e);
@@ -204,9 +200,9 @@ class PollTest extends \TestCase
         $this->assertTrue($poll->lock());
         $option = $poll->options()->first();
 
-        try{
+        try {
             $voter->poll($poll)->vote($option->getKey());
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->assertTrue($e instanceof VoteInClosedPollException);
         }
         $this->assertNotNull($e);
@@ -234,8 +230,8 @@ class PollTest extends \TestCase
         $id = $poll->id;
         $this->assertTrue($poll->remove());
         $this->dontSeeInDatabase('options', [
-                'poll_id' => $id
-            ]);;
+            'poll_id' => $id
+        ]);;
     }
     /**
      * Make one user

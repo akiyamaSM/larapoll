@@ -5,7 +5,7 @@ namespace Inani\Larapoll\Tests;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class CreatesPollTest extends \TestCase
+class CreatesPollTest extends LarapollTestCase
 {
     use DatabaseTransactions;
 
