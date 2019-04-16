@@ -4,14 +4,11 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Inani\Larapoll\Poll;
-use InvalidArgumentException;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 
-class PollTest extends \TestCase
+class PollTest extends LarapollTestCase
 {
-    use DatabaseTransactions;
 
     /** @test */
     public function it_creates_new_poll()
@@ -21,8 +18,8 @@ class PollTest extends \TestCase
         ]);
 
         $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection()
-                     ->generate();
+            ->maxSelection()
+            ->generate();
 
         $this->assertTrue($bool);
         $this->assertTrue($poll->isRadio());
@@ -37,8 +34,8 @@ class PollTest extends \TestCase
         ]);
 
         $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                    ->maxSelection()
-                    ->generate();
+            ->maxSelection()
+            ->generate();
 
         $this->assertTrue($bool);
         $this->assertTrue($poll->isRadio());
@@ -66,9 +63,8 @@ class PollTest extends \TestCase
         $this->assertEquals(4, $poll->optionsNumber());
 
         $option = $poll->options()->first();
-        $this->assertTrue($poll->detach($option));
+        $this->assertTrue($poll->detach($option->id));
         $this->assertEquals(3, $poll->optionsNumber());
-
     }
 
     /** @test */
@@ -80,8 +76,8 @@ class PollTest extends \TestCase
         ]);
 
         $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection(2)
-                     ->generate();
+            ->maxSelection(2)
+            ->generate();
         $voteFor = $poll->options()->first();
         $this->assertTrue($voter->poll($poll)->vote($voteFor->getKey()));
     }
@@ -95,14 +91,12 @@ class PollTest extends \TestCase
         ]);
 
         $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection(2)
-                     ->generate();
+            ->maxSelection(2)
+            ->generate();
         $voteFor = $poll->options()->get()->take(3)->pluck('id')->all();
-        try{
+        try {
             $voter->poll($poll)->vote($voteFor);
-        }catch (\InvalidArgumentException $e){
-
-        }
+        } catch (\InvalidArgumentException $e) { }
         $this->assertNotNull($e);
     }
 
@@ -115,18 +109,17 @@ class PollTest extends \TestCase
         ]);
 
         $bool = $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
-                     ->maxSelection(2)
-                     ->generate();
+            ->maxSelection(2)
+            ->generate();
 
         $this->assertTrue($bool);
         $this->assertEquals(4, $poll->optionsNumber());
 
         $option = $poll->options()->first();
         $this->assertTrue($voter->poll($poll)->vote($option->getKey()));
-        try{
+        try {
             $poll->detach($option);
-        }catch (RemoveVotedOptionException $e){
-        }
+        } catch (RemoveVotedOptionException $e) { }
         $this->assertNotNull($e);
 
         $this->assertEquals(4, $poll->optionsNumber());
@@ -182,9 +175,9 @@ class PollTest extends \TestCase
         $this->assertTrue($poll->lock());
         $option = $poll->options()->first();
 
-        try{
+        try {
             $voter->poll($poll)->vote($option->getKey());
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->assertTrue($e instanceof VoteInClosedPollException);
         }
         $this->assertNotNull($e);
@@ -204,9 +197,9 @@ class PollTest extends \TestCase
         $this->assertTrue($poll->lock());
         $option = $poll->options()->first();
 
-        try{
+        try {
             $voter->poll($poll)->vote($option->getKey());
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->assertTrue($e instanceof VoteInClosedPollException);
         }
         $this->assertNotNull($e);
@@ -233,10 +226,33 @@ class PollTest extends \TestCase
 
         $id = $poll->id;
         $this->assertTrue($poll->remove());
-        $this->dontSeeInDatabase('options', [
-                'poll_id' => $id
-            ]);;
+        $this->dontSeeInDatabase('larapoll_options', [
+            'poll_id' => $id
+        ]);
     }
+
+    public function test_poll_writer_draw_function_accept_instance_of_poll_class_only()
+    {
+        $this->expectException(\TypeError::class);
+        \PollWriter::draw(25);
+    }
+    /**
+     * Make poll
+     *
+     * @return mixed
+     */
+    public function makePoll()
+    {
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection()
+            ->generate();
+        return $poll;
+    }
+
     /**
      * Make one user
      *

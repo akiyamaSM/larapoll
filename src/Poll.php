@@ -35,8 +35,8 @@ class Poll extends Model
     public static function boot()
     {
         parent::boot();
-        static::deleting(function($poll) {
-            $poll->options->each(function($option){
+        static::deleting(function ($poll) {
+            $poll->options->each(function ($option) {
                 Vote::where('option_id', $option->id)->delete();
             });
             $poll->options()->delete();
