@@ -6,7 +6,8 @@ use Inani\Larapoll\Poll;
 use Inani\Larapoll\Traits\PollWriterResults;
 use Inani\Larapoll\Traits\PollWriterVoting;
 
-class PollWriter {
+class PollWriter
+{
     use PollWriterResults,
         PollWriterVoting;
 
@@ -16,22 +17,20 @@ class PollWriter {
      * @param $poll_id
      * @return string|void
      */
-    public function draw($poll_id)
+    public function draw(Poll $poll)
     {
-        $poll = Poll::findOrFail($poll_id);
-
-        if($poll->isComingSoon()){
+        if ($poll->isComingSoon()) {
             return 'To start soon';
         }
 
         $voter = auth(config('larapoll_config.admin_guard'))->user();
 
 
-        if(is_null($voter) || $voter->hasVoted($poll_id) || $poll->isLocked()){
+        if (is_null($voter) || $voter->hasVoted($poll_id) || $poll->isLocked()) {
             return $this->drawResult($poll);
         }
 
-        if($poll->isRadio()){
+        if ($poll->isRadio()) {
             return $this->drawRadio($poll);
         }
         return $this->drawCheckbox($poll);

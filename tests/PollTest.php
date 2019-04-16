@@ -4,7 +4,6 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Inani\Larapoll\Poll;
-use InvalidArgumentException;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 
@@ -231,6 +230,29 @@ class PollTest extends LarapollTestCase
             'poll_id' => $id
         ]);
     }
+
+    public function test_poll_writer_draw_function_accept_instance_of_poll_class_only()
+    {
+        $this->expectException(\TypeError::class);
+        \PollWriter::draw(25);
+    }
+    /**
+     * Make poll
+     *
+     * @return mixed
+     */
+    public function makePoll()
+    {
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
+            ->maxSelection()
+            ->generate();
+        return $poll;
+    }
+
     /**
      * Make one user
      *
