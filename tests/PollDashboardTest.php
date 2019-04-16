@@ -56,9 +56,9 @@ class PollDashboardTest extends LarapollTestCase
             ],
             'maxCheck' => 1
         ];
-        $this->post(route('poll.store'), $request);
-        // ->assertPathIs(route('poll.index'))
-        // ->assertSessionHas('success');
+        $this->post(route('poll.store'), $request)
+            ->assertRedirectedTo(route('poll.index'))
+            ->assertSessionHas('success');
 
         $this->seeInDatabase('larapoll_polls', ['question' => $request['question']]);
     }
