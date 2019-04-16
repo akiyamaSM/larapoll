@@ -4,11 +4,9 @@ namespace Inani\Larapoll\Tests;
 
 use App\User;
 use Inani\Larapoll\Poll;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class PollDashboardTest extends \TestCase
+class PollDashboardTest extends LarapollTestCase
 {
-    use DatabaseMigrations;
 
     protected $user;
 
@@ -51,7 +49,7 @@ class PollDashboardTest extends \TestCase
     {
         $this->beAdmin();
 
-        $request =[
+        $request = [
             'question' => 'Who is the Best Player of the World?',
             'options' => [
                 'Cristiano Ronaldo', 'Lionel Messi', 'Neymar Jr'
@@ -62,7 +60,7 @@ class PollDashboardTest extends \TestCase
             ->assertRedirectedTo(route('poll.index'))
             ->assertSessionHas('success');
 
-        $this->seeInDatabase('polls', [ 'question' => $request['question'] ]);
+        $this->seeInDatabase('larapoll_polls', ['question' => $request['question']]);
     }
 
     /** @test */
@@ -77,7 +75,7 @@ class PollDashboardTest extends \TestCase
             ->maxSelection()
             ->generate();
 
-        $this->get(route('poll.edit', [ 'poll' => $poll->id ]))
+        $this->get(route('poll.edit', ['poll' => $poll->id]))
             ->assertResponseStatus(200)
             ->see($poll->question)
             ->see('Cristiano Ronaldo')
@@ -93,16 +91,16 @@ class PollDashboardTest extends \TestCase
         $poll = factory(Poll::class)->create();
 
         $options = [
-            'options' => [ 'option'. str_random(3) ]
+            'options' => ['option' . str_random(3)]
         ];
 
-        $this->post(route('poll.options.add', [ 'id' => $poll->id ]), $options)
+        $this->post(route('poll.options.add', ['id' => $poll->id]), $options)
             ->assertResponseStatus(302)
             ->assertSessionHas('success');
 
-        $this->seeInDatabase('options', [
-                 'name' => $options['options'][0],
-                 'poll_id' => $poll->id
+        $this->seeInDatabase('larapoll_options', [
+            'name' => $options['options'][0],
+            'poll_id' => $poll->id
         ]);
     }
 
@@ -114,14 +112,14 @@ class PollDashboardTest extends \TestCase
         $poll = factory(Poll::class)->create();
 
         $options = [
-            'options' => [ '' ]
+            'options' => ['']
         ];
 
-        $this->post(route('poll.options.add', [ 'id' => $poll->id ]), $options);
+        $this->post(route('poll.options.add', ['id' => $poll->id]), $options);
 
-        $this->dontSeeInDatabase('options', [
-                 'name' => $options['options'][0],
-                 'poll_id' => $poll->id
+        $this->dontseeInDatabase('larapoll_options', [
+            'name' => $options['options'][0],
+            'poll_id' => $poll->id
         ]);
     }
 
@@ -139,13 +137,13 @@ class PollDashboardTest extends \TestCase
 
         $toDelete = $poll->options()->orderBy('id', 'desc')->first();
         $options = [
-            'options' => [ $toDelete->id ]
+            'options' => [$toDelete->id]
         ];
-        $this->delete( route('poll.options.remove', $poll->id), $options)
-             ->dontSeeInDatabase('options', [
+        $this->delete(route('poll.options.remove', $poll->id), $options)
+            ->dontseeInDatabase('larapoll_options', [
                 'name' => $toDelete->name,
                 'id' => $toDelete->id
-             ]);
+            ]);
     }
 
     /** @test */
@@ -163,12 +161,12 @@ class PollDashboardTest extends \TestCase
 
         $voteFor = $poll->options()->first();
         $options = [
-            'options' => [ $voteFor->id ]
+            'options' => [$voteFor->id]
         ];
         $this->user->poll($poll)->vote($voteFor->getKey());
 
-        $this->delete( route('poll.options.remove', $poll->id), $options)
-            ->SeeInDatabase('options', [
+        $this->delete(route('poll.options.remove', $poll->id), $options)
+            ->seeInDatabase('larapoll_options', [
                 'name' => $voteFor->name,
                 'id' => $voteFor->id
             ]);
@@ -231,8 +229,7 @@ class PollDashboardTest extends \TestCase
             ->generate();
 
         $this->assertTrue($poll->lock());
-        $options = [
-        ];
+        $options = [];
 
         $this->post(route('poll.update', $poll->id), $options)
             ->assertResponseStatus(302)
@@ -256,8 +253,7 @@ class PollDashboardTest extends \TestCase
             ->assertRedirectedTo(route('poll.index'))
             ->assertSessionHas('success');
 
-        $this->dontSeeInDatabase('polls', [ 'id' => $poll->id ]);
-
+        $this->dontSeeInDatabase('larapoll_polls', ['id' => $poll->id]);
     }
     /**
      * Make a user and Connect as admin
