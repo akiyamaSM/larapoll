@@ -10,7 +10,8 @@ use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Poll;
 use InvalidArgumentException;
 
-class PollHandler {
+class PollHandler
+{
 
     /**
      * Create a Poll from Request
@@ -31,7 +32,7 @@ class PollHandler {
 
         $poll->addOptions($request['options']);
 
-        if(array_key_exists('maxCheck', $request)){
+        if (array_key_exists('maxCheck', $request)) {
             $poll->maxSelection($request['maxCheck']);
         }
 
@@ -48,18 +49,29 @@ class PollHandler {
      */
     public static function modify(Poll $poll, $data)
     {
-        if(array_key_exists('count_check', $data)){
-            if($data['count_check'] < $poll->options()->count()){
+        if (array_key_exists('count_check', $data)) {
+            if ($data['count_check'] < $poll->options()->count()) {
                 $poll->canSelect($data['count_check']);
             }
         }
 
-        if(array_key_exists('close', $data)){
-            if(isset($data['close']) && $data['close']){
+        // change see result value
+        if (array_key_exists('canVoterSeeResult', $data)) {
+            if (isset($data['canVoterSeeResult']) && $data['canVoterSeeResult']) {
+                $poll->enableShowResults();
+            }
+        } else {
+            $poll->disableShowResults();
+        }
+
+        if (array_key_exists('close', $data)) {
+            if (isset($data['close']) && $data['close']) {
                 $poll->lock();
                 return;
             }
         }
+
+
 
         $poll->update([
             'question' => $data['question'],
@@ -78,14 +90,14 @@ class PollHandler {
      */
     public static function getMessage(Exception $e)
     {
-        if($e instanceof OptionsInvalidNumberProvidedException || $e instanceof OptionsNotProvidedException)
+        if ($e instanceof OptionsInvalidNumberProvidedException || $e instanceof OptionsNotProvidedException)
             return 'A poll should have two options at least';
-        if($e instanceof RemoveVotedOptionException)
+        if ($e instanceof RemoveVotedOptionException)
             return 'You can not remove an option that has a vote';
-        if($e instanceof CheckedOptionsException)
+        if ($e instanceof CheckedOptionsException)
             return 'You should edit the number of checkable options first.';
 
-        if($e instanceof  InvalidArgumentException){
+        if ($e instanceof  InvalidArgumentException) {
             return $e->getMessage();
         }
     }

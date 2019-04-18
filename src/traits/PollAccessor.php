@@ -46,6 +46,16 @@ trait PollAccessor
     }
 
     /**
+     * Check if voters can see results
+     *
+     * @return bool
+     */
+    public function showResultsEnabled()
+    {
+        return !is_null($this->canVoterSeeResult) && $this->canVoterSeeResult == 1;
+    }
+
+    /**
      * Get the question
      *
      * @return mixed

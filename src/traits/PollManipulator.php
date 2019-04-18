@@ -20,23 +20,22 @@ trait PollManipulator
      */
     public function attach($options)
     {
-        if(is_array($options))
-        {
+        if (is_array($options)) {
             $newOptions = [];
 
-            foreach($options as $option){
-                if(is_string($option)){
+            foreach ($options as $option) {
+                if (is_string($option)) {
                     $newOptions[] = new Option([
                         'name' => $option
                     ]);
-                }else{
+                } else {
                     throw new InvalidArgumentException("Array arguments must be composed of Strings values");
                 }
             }
             return $this->options()->saveMany($newOptions);
         }
 
-        if(is_string($options)){
+        if (is_string($options)) {
             return $this->options()->save(
                 new Option([
                     'name' => $options
@@ -65,43 +64,41 @@ trait PollManipulator
 
         $oldOptions = [];
         $elements = $this->options()->pluck('id');
-        foreach($options as $option){
-            if(is_numeric($option) && is_int(intval($option))){
+        foreach ($options as $option) {
+            if (is_numeric($option) && is_int(intval($option))) {
                 $option = intval($option);
                 $option = Option::findOrFail($option);
-                if($option->isVoted())
+                if ($option->isVoted())
                     throw new RemoveVotedOptionException();
-                if($this->containsAndNotVoted($elements, $option->id)){
+                if ($this->containsAndNotVoted($elements, $option->id)) {
                     $oldOptions[] = $option->id;
                 }
-            }else if($option instanceof Option){
-                if($option->isVoted())
+            } else if ($option instanceof Option) {
+                if ($option->isVoted())
                     throw new RemoveVotedOptionException();
-                if($this->containsAndNotVoted($elements, $option->getKey())) {
+                if ($this->containsAndNotVoted($elements, $option->getKey())) {
                     $oldOptions = $option->getKey();
                 }
-
-            }else {
+            } else {
                 throw new InvalidArgumentException("Array arguments must be composed of ids or option object values");
             }
-
         }
 
         // verify the number of options
         $diff = ($elements->count() - count($oldOptions));
-        if( $diff == 0)
+        if ($diff == 0)
             throw new OptionsNotProvidedException();
-        if( $diff == 1)
+        if ($diff == 1)
             throw new OptionsInvalidNumberProvidedException();
 
-        if($this->isRadio()){
+        if ($this->isRadio()) {
             $count = count($oldOptions);
             return Option::destroy($oldOptions) == $count;
         }
 
         // checkbox case
 
-        if($diff <= $this->maxCheck)
+        if ($diff <= $this->maxCheck)
             throw new CheckedOptionsException();
 
         $count = count($oldOptions);
@@ -129,7 +126,7 @@ trait PollManipulator
     public function lock()
     {
         // Update the total of votes column
-        foreach($this->options()->get() as $option){
+        foreach ($this->options()->get() as $option) {
             $option->updateTotalVotes();
         }
 
@@ -146,6 +143,30 @@ trait PollManipulator
     public function unLock()
     {
         $this->isClosed = null;
+
+        return $this->save();
+    }
+
+    /**
+     *  enable show results
+     *
+     * @return mixed
+     */
+    public function enableShowResults()
+    {
+        $this->canVoterSeeResult = 1;
+
+        return $this->save();
+    }
+
+    /**
+     *  disable show results
+     *
+     * @return mixed
+     */
+    public function disableShowResults()
+    {
+        $this->canVoterSeeResult = 0;
 
         return $this->save();
     }

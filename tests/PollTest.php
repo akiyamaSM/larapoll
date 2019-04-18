@@ -6,6 +6,7 @@ use App\User;
 use Inani\Larapoll\Poll;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
+use Inani\Larapoll\Helpers\PollHandler;
 
 class PollTest extends LarapollTestCase
 {
@@ -236,15 +237,28 @@ class PollTest extends LarapollTestCase
         $this->expectException(\TypeError::class);
         \PollWriter::draw(25);
     }
+
+    /** @test */
+    public function poll_writer_does_not_show_result_if_it_was_disabled()
+    {
+        $poll = $this->makePoll();
+        $this->assertEquals(0, $poll->canVoterSeeResult);
+        $this->assertNotTrue($poll->showResultsEnabled());
+        $poll->update(['canVoterSeeResult' => 1]);
+        $this->assertEquals(1, $poll->canVoterSeeResult);
+        $this->assertTrue($poll->showResultsEnabled());
+    }
+
     /**
      * Make poll
      *
      * @return mixed
      */
-    public function makePoll()
+    public function makePoll($canVoterSeeResult = 0)
     {
         $poll = new Poll([
-            'question' => 'What is the best PHP framework?'
+            'question' => 'What is the best PHP framework?',
+            'canVoterSeeResult' => $canVoterSeeResult
         ]);
 
         $poll->addOptions(['Laravel', 'Zend', 'Symfony', 'Cake'])
