@@ -23,6 +23,10 @@ class PollWriter
             return 'To start soon';
         }
 
+        if (!$poll->showResultsEnabled()) {
+            return 'Thanks for voting';
+        }
+
         $voter = auth(config('larapoll_config.admin_guard'))->user();
 
 

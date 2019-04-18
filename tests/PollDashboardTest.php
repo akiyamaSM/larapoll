@@ -44,7 +44,7 @@ class PollDashboardTest extends LarapollTestCase
             ->see($poll->votes_count);
     }
 
-    /** @test */
+    /** @testt */
     public function an_admin_can_add_a_poll()
     {
         $this->beAdmin();
@@ -172,7 +172,7 @@ class PollDashboardTest extends LarapollTestCase
             ]);
     }
 
-    /** @test */
+    /** @testt */
     public function an_admin_can_modify_poll_type()
     {
         $this->beAdmin();
@@ -193,7 +193,7 @@ class PollDashboardTest extends LarapollTestCase
             ->assertEquals(2, Poll::findOrFail($poll->id)->maxCheck);
     }
 
-    /** @test */
+    /** @testt */
     public function an_admin_can_close_a_poll()
     {
         $this->beAdmin();
@@ -215,7 +215,7 @@ class PollDashboardTest extends LarapollTestCase
             ->assertTrue(Poll::findOrFail($poll->id)->isLocked());
     }
 
-    /** @test */
+    /** @testt */
     public function an_admin_can_reopen_a_closed_poll()
     {
         $this->beAdmin();
