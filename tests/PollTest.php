@@ -7,6 +7,7 @@ use Inani\Larapoll\Poll;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Helpers\PollHandler;
+use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 
 class PollTest extends LarapollTestCase
 {
@@ -232,7 +233,8 @@ class PollTest extends LarapollTestCase
         ]);
     }
 
-    public function test_poll_writer_draw_function_accept_instance_of_poll_class_only()
+    /** @test */
+    public function a_poll_writer_draw_function_accept_instance_of_poll_class_only()
     {
         $this->expectException(\TypeError::class);
         \PollWriter::draw(25);
@@ -247,6 +249,19 @@ class PollTest extends LarapollTestCase
         $poll->update(['canVoterSeeResult' => 1]);
         $this->assertEquals(1, $poll->canVoterSeeResult);
         $this->assertTrue($poll->showResultsEnabled());
+    }
+
+    /** @test */
+    public function an_exception_will_be_thrown_if_admin_create_a_poll_with_duplicated_options()
+    {
+        $this->expectException(OptionsInvalidNumberProvidedException::class);
+        $poll = new Poll([
+            'question' => 'What is the best PHP framework?'
+        ]);
+
+        $poll->addOptions(['Laravel', 'Laravel'])
+            ->maxSelection()
+            ->generate();
     }
 
     /**

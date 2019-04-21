@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inani\Larapoll\Helpers\PollHandler;
 use Inani\Larapoll\Http\Request\PollCreationRequest;
 use Inani\Larapoll\Poll;
+use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 
 class PollManagerController extends Controller
 {
@@ -43,7 +44,14 @@ class PollManagerController extends Controller
      */
     public function store(PollCreationRequest $request)
     {
-        $poll = PollHandler::createFromRequest($request->all());
+        try {
+            PollHandler::createFromRequest($request->all());
+        } catch (OptionsInvalidNumberProvidedException $th) {
+            return redirect(route('poll.create'))
+                ->withInput($request->all())
+                ->with('danger', 'Duplicated options');
+        }
+
         return redirect(route('poll.index'))
             ->with('success', 'Your poll has been addedd successfully');
     }
