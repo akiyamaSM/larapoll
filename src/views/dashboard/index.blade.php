@@ -103,15 +103,13 @@ Polls- Listing
 @endsection
 
 @section('js')
-<!-- Delete Confirmation -->
 <script>
+    // Delete Confirmation 
     $(".delete").on("submit", function() {
         return confirm("Delete the poll?");
     });
-</script>
 
-<!-- Lock Confirmation -->
-<script>
+    // Lock Confirmation
     $(".lock").on("submit", function() {
         return confirm("Lock/Unlock the poll?");
     });
