@@ -6,6 +6,7 @@ use Inani\Larapoll\Exceptions\CheckedOptionsException;
 use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 use Inani\Larapoll\Exceptions\OptionsNotProvidedException;
 use Inani\Larapoll\Option;
+use Inani\Larapoll\Exceptions\DuplicatedOptionsException;
 
 trait PollCreator
 {
@@ -17,14 +18,15 @@ trait PollCreator
      *
      * @param $option
      * @return bool
+     * @throws DuplicatedOptionsException
      */
     private function pushOption($option)
     {
-        if(! in_array($option, $this->options_add)){
+        if (!in_array($option, $this->options_add)) {
             $this->options_add[] = $option;
             return true;
         }
-        return false;
+        throw new DuplicatedOptionsException();
     }
 
     /**
@@ -36,19 +38,18 @@ trait PollCreator
      */
     public function addOptions($options)
     {
-        if(is_array($options))
-        {
-            foreach($options as $option){
-                if(is_string($option)){
+        if (is_array($options)) {
+            foreach ($options as $option) {
+                if (is_string($option)) {
                     $this->pushOption($option);
-                }else{
+                } else {
                     throw new \InvalidArgumentException("Array arguments must be composed of Strings values");
                 }
             }
             return $this;
         }
 
-        if(is_string($options)){
+        if (is_string($options)) {
             $this->pushOption($options);
             return $this;
         }
@@ -64,7 +65,7 @@ trait PollCreator
      */
     public function maxSelection($number = 1)
     {
-        if($number <= 1){
+        if ($number <= 1) {
             $number = 1;
         }
         $this->maxSelection = $number;
@@ -80,7 +81,7 @@ trait PollCreator
      */
     public function startsAt($at = null)
     {
-        $this->starts_at = !is_null($at) ? $at : now() ;
+        $this->starts_at = !is_null($at) ? $at : now();
 
         return $this;
     }
@@ -111,15 +112,15 @@ trait PollCreator
         $totalOptions = count($this->options_add);
 
         // No option add yet
-        if($totalOptions == 0)
+        if ($totalOptions == 0)
             throw new OptionsNotProvidedException();
 
         // There must be 2 options at least
-        if($totalOptions == 1 )
+        if ($totalOptions == 1)
             throw new OptionsInvalidNumberProvidedException();
 
         // At least one options should not be selected
-        if($totalOptions <= $this->maxSelection )
+        if ($totalOptions <= $this->maxSelection)
             throw new CheckedOptionsException();
 
         // Create Poll && assign options to it
@@ -141,7 +142,7 @@ trait PollCreator
     private function instantiateOptions()
     {
         $options = [];
-        foreach($this->options_add as $option){
+        foreach ($this->options_add as $option) {
             $options[] = new Option([
                 'name' => $option
             ]);

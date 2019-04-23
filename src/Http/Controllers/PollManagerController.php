@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inani\Larapoll\Helpers\PollHandler;
 use Inani\Larapoll\Http\Request\PollCreationRequest;
 use Inani\Larapoll\Poll;
+use Inani\Larapoll\Exceptions\DuplicatedOptionsException;
 
 class PollManagerController extends Controller
 {
@@ -43,7 +44,16 @@ class PollManagerController extends Controller
      */
     public function store(PollCreationRequest $request)
     {
-        $poll = PollHandler::createFromRequest($request->all());
+        try {
+            PollHandler::createFromRequest($request->all());
+        } catch (DuplicatedOptionsException $exception) {
+            return redirect(route('poll.create'))
+                ->withInput($request->all())
+                // return options value
+                ->withRequestOptions($request->options)
+                ->with('danger', $exception->getMessage());
+        }
+
         return redirect(route('poll.index'))
             ->with('success', 'Your poll has been addedd successfully');
     }
