@@ -106,10 +106,20 @@ Polls- Creation
         </form>
     </div>
 </div>
+
 @endsection
 
 @section('js')
 <script type="text/javascript">
+    // re render requested options
+    @if(old('options'))
+    @foreach(array_slice(old('options'), 2) as $option)
+    var e = document.createElement('li');
+    e.innerHTML = "<input type='text' name='options[]' value='{{ $option }}' class='form-control add-input' placeholder='Insert your option' /> <a class='btn btn-danger' href='#' onclick='remove(this)'><i class='fa fa-minus-circle' aria-hidden='true'></i></a>";
+    document.getElementById("options").appendChild(e);
+    @endforeach
+    @endif
+
     function remove(current) {
         current.parentNode.remove()
     }

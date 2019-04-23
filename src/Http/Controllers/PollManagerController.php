@@ -47,9 +47,10 @@ class PollManagerController extends Controller
         try {
             PollHandler::createFromRequest($request->all());
         } catch (DuplicatedOptionsException $exception) {
-            dd($request->all());
             return redirect(route('poll.create'))
                 ->withInput($request->all())
+                // return options value
+                ->withRequestOptions($request->options)
                 ->with('danger', $exception->getMessage());
         }
 
