@@ -8,6 +8,7 @@ use Inani\Larapoll\Exceptions\VoteInClosedPollException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
 use Inani\Larapoll\Helpers\PollHandler;
 use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
+use Inani\Larapoll\Exceptions\DuplicatedOptionsException;
 
 class PollTest extends LarapollTestCase
 {
@@ -254,7 +255,7 @@ class PollTest extends LarapollTestCase
     /** @test */
     public function an_exception_will_be_thrown_if_admin_create_a_poll_with_duplicated_options()
     {
-        $this->expectException(OptionsInvalidNumberProvidedException::class);
+        $this->expectException(DuplicatedOptionsException::class);
         $poll = new Poll([
             'question' => 'What is the best PHP framework?'
         ]);
