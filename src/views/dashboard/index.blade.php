@@ -72,7 +72,7 @@ Polls- Listing
                     </a>
                 </td>
                 <td>
-                    <form action="{{ route('poll.remove', $poll->id) }}" method="POST">
+                    <form class="delete" action="{{ route('poll.remove', $poll->id) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}
                         <button type="submit" class="btn btn-danger btn-sm">
@@ -83,7 +83,7 @@ Polls- Listing
                 <td>
                     @php $route = $poll->isLocked()? 'poll.unlock': 'poll.lock' @endphp
                     @php $fa = $poll->isLocked()? 'fa fa-unlock': 'fa fa-lock' @endphp
-                    <form action="{{ route($route, $poll->id) }}" method="POST">
+                    <form class="lock" action="{{ route($route, $poll->id) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('PATCH') }}
                         <button type="submit" class="btn btn-sm">
@@ -100,4 +100,18 @@ Polls- Listing
     @endif
     {{ $polls->links() }}
 </div>
+@endsection
+
+@section('js')
+<script>
+    // Delete Confirmation 
+    $(".delete").on("submit", function() {
+        return confirm("Delete the poll?");
+    });
+
+    // Lock Confirmation
+    $(".lock").on("submit", function() {
+        return confirm("Lock/Unlock the poll?");
+    });
+</script>
 @endsection
