@@ -30,10 +30,6 @@ class VoteManagerController extends Controller
                 return back()->with('success', 'Vote Done');
             }
         }catch (Exception $e){
-
-            dd(
-                $e->getMessage()
-            );
             return back()->with('errors', $e->getMessage());
         }
     }
