@@ -2,11 +2,11 @@
 
 namespace Inani\Larapoll\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Exception;
-use Illuminate\Http\Request;
-use Inani\Guest;
 use Inani\Larapoll\Poll;
+use Inani\Larapoll\Guest;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class VoteManagerController extends Controller
 {
