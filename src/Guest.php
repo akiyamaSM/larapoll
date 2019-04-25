@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Inani;
+namespace Inani\Larapoll;
 
 
 use Inani\Larapoll\Traits\Voter;
