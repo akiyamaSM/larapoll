@@ -46,6 +46,6 @@ class VoteManagerController extends Controller
         if($poll->canGuestVote()){
             return new Guest($request);
         }
-        return $request->user(config('admin_guard'));
+        return $request->user(config('larapoll_config.admin_guard'));
     }
 }

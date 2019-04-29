@@ -2,6 +2,7 @@
 
 namespace Inani\Larapoll\Helpers;
 
+use Inani\Larapoll\Guest;
 use Inani\Larapoll\Poll;
 use Inani\Larapoll\Traits\PollWriterResults;
 use Inani\Larapoll\Traits\PollWriterVoting;
@@ -14,8 +15,8 @@ class PollWriter
     /**
      * Draw a Poll
      *
-     * @param $poll_id
-     * @return string|void
+     * @param Poll $poll
+     * @return string
      */
     public function draw(Poll $poll)
     {
@@ -27,8 +28,8 @@ class PollWriter
             return 'Thanks for voting';
         }
 
-        $voter = auth(config('larapoll_config.admin_guard'))->user();
 
+        $voter = $poll->canGuestVote() ? new Guest(request()) : auth(config('larapoll_config.admin_guard'))->user();
 
         if (is_null($voter) || $voter->hasVoted($poll->id) || $poll->isLocked()) {
             return $this->drawResult($poll);

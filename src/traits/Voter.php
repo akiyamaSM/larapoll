@@ -5,9 +5,9 @@ namespace Inani\Larapoll\Traits;
 
 
 use Illuminate\Support\Facades\DB;
-use Inani\Guest;
 use Inani\Larapoll\Exceptions\PollNotSelectedToVoteException;
 use Inani\Larapoll\Exceptions\VoteInClosedPollException;
+use Inani\Larapoll\Guest;
 use Inani\Larapoll\Option;
 use Inani\Larapoll\Poll;
 use Inani\Larapoll\Vote;
