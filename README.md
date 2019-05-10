@@ -6,7 +6,7 @@ A Laravel package to manage your polls
 First, install the package through Composer. 
 
 ```bash
-composer require inani/larapoll ^2.5
+composer require inani/larapoll 
 ```
 
 You can skip the next two steps
@@ -133,7 +133,7 @@ With Larapoll its easy to integrate a poll for users to vote, you only have to s
 - the ID of the poll 
 
 ```php
-{{ PollWriter::draw(77) }}
+{{ PollWriter::draw(Poll::find(77)) }}
 ```
 ### Override views
 You can override the views related to the results page and both pages checkbox/radio via the same larapoll_config.php file in the config folder.
