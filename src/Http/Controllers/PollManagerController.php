@@ -57,6 +57,20 @@ class PollManagerController extends Controller
     }
 
     /**
+     * Show the single poll for voters
+     *
+     * @param Poll $poll
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     */
+    public function show(Poll $poll)
+    {
+        if (auth()->guest() && !$poll->canGuestVote()) {
+            return abort(403, 'This poll not allowed for guests.');
+        }
+        return view(config('larapoll_config.single_poll')?:'larapoll::poll', compact('poll'));
+    }
+
+    /**
      * Show the poll to be prepared to edit
      *
      * @param Poll $poll

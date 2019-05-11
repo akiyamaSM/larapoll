@@ -43,7 +43,7 @@ Polls- Listing
             @forelse($polls as $poll)
             <tr>
                 <th scope="row">{{ $poll->id }}</th>
-                <td>{{ $poll->question }}</td>
+                <td><a href="{{ route('poll.show', $poll) }}">{{ $poll->question }}</a></td>
                 <td>{{ $poll->options_count }}</td>
                 <td>{{ $poll->canVisitorsVote ? 'Yes' : 'No' }}</td>
                 <td>{{ $poll->votes_count }}</td>

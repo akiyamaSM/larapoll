@@ -4,6 +4,7 @@ return [
     'admin_guard' => env('LARAPOLL_ADMIN_AUTH_GUARD', 'web'),
     'pagination' => env('LARAPOLL_PAGINATION', 15),
     'prefix' => env('LARAPOLL_PREFIX', 'admin_polls'),
+    'single_poll' => '',
     'results' => '',
     'radio' => '',
     'checkbox' => '',

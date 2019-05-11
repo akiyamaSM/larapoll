@@ -24,3 +24,7 @@ Route::group(['namespace' => 'Inani\Larapoll\Http\Controllers', 'prefix' => $pre
 
     Route::post('/vote/polls/{poll}', 'VoteManagerController@vote')->name('poll.vote');
 });
+
+Route::group(['namespace' => 'Inani\Larapoll\Http\Controllers', 'middleware' => 'web'], function() {
+    Route::get('/polls/{poll}', 'PollManagerController@show')->name('poll.show');
+});
