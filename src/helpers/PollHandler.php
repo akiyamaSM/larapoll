@@ -50,7 +50,7 @@ class PollHandler
     public static function modify(Poll $poll, $data)
     {
         if (array_key_exists('count_check', $data)) {
-            if ($data['count_check'] < $poll->options()->count()) {
+            if ($data['count_check'] <= $poll->options()->count()) {
                 $poll->canSelect($data['count_check']);
             }
         }
