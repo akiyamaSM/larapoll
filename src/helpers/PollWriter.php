@@ -32,14 +32,12 @@ class PollWriter
             return 'To start soon';
         }
 
-        if (!$poll->showResultsEnabled()) {
-            return 'Thanks for voting';
-        }
-
-
         $voter = $poll->canGuestVote() ? new Guest(request()) : auth(config('larapoll_config.admin_guard'))->user();
 
         if (is_null($voter) || $voter->hasVoted($poll->id) || $poll->isLocked()) {
+            if (!$poll->showResultsEnabled()) {
+                return 'Thanks for voting';
+            }
             return $this->drawResult($poll);
         }
 
