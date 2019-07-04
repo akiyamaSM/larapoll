@@ -2,7 +2,6 @@
 
 namespace Inani\Larapoll\Traits;
 
-use App\User;
 use Inani\Larapoll\Vote;
 
 trait Votable
@@ -25,7 +24,7 @@ trait Votable
      */
     public function voters()
     {
-        return $this->belongsToMany(User::class, 'larapoll_votes')->withTimestamps();
+        return $this->belongsToMany(app('config')->get('larapoll_config.user_model'), 'larapoll_votes')->withTimestamps();
     }
 
     /**
