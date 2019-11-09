@@ -122,7 +122,7 @@ A larapoll_config.php file will be added where you can put the name of the middl
 Add this line in the .env too
 
 ```php
-LARAPOLL_ADMIN_AUTH_MIDDELWARE = auth
+LARAPOLL_ADMIN_AUTH_MIDDLEWARE = auth
 LARAPOLL_ADMIN_AUTH_GUARD = web
 LARAPOLL_PAGINATION = 10
 LARAPOLL_PREFIX = Larapoll
