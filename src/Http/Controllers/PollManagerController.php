@@ -52,8 +52,7 @@ class PollManagerController extends Controller
                 ->with('danger', $exception->getMessage());
         }
 
-        return redirect(route('poll.index'))
-            ->with('success', 'Your poll has been addedd successfully');
+        return response('Your poll has been created successfully', 200);
     }
 
     /**
