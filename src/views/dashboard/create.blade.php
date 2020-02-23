@@ -4,6 +4,19 @@ Polls- Creation
 @endsection
 @section('style')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" rel="stylesheet" />
+    <style>
+        .custom-label input:checked + svg {
+            display: block !important;
+        }
+
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        body.modal-active {
+            overflow-x: hidden;
+            overflow-y: visible !important;
+        }
+    </style>
 @endsection
 @section('content')
 <div class="container mx-auto" id="app">
@@ -22,6 +35,25 @@ Polls- Creation
             </li>
         </ol>
     </section>
+
+    <!--Modal-->
+    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
+        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+
+        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+            <!-- Add margin if you want to see some of the overlay behind the modal-->
+            <div class="modal-content py-4 text-left px-6">
+                <!--Title-->
+                <div class="flex justify-between items-center pb-3">
+                    <p class="text-2xl font-bold">Upps, Something is Wrong!</p>
+                </div>
+                <!--Body-->
+                <p>@{{ error_message }}</p>
+
+            </div>
+        </div>
+    </div>
+
 
     <div class="w-full">
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -66,6 +98,18 @@ Polls- Creation
                 </div>
             </div>
 
+            <div class="flex flex-wrap -mx-3 mb-6">
+                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                    <label class="custom-label flex">
+                        <div class="bg-white shadow w-6 h-6 p-1 flex justify-center items-center mr-2">
+                            <input id="canVisitors" type="checkbox" class="hidden">
+                            <svg class="hidden w-4 h-4 text-green-600 pointer-events-none" viewBox="0 0 172 172"><g fill="none" stroke-width="none" stroke-miterlimit="10" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode:normal"><path d="M0 172V0h172v172z"/><path d="M145.433 37.933L64.5 118.8658 33.7337 88.0996l-10.134 10.1341L64.5 139.1341l91.067-91.067z" fill="currentColor" stroke-width="1"/></g></svg>
+                        </div>
+                        <span class="select-none">Allow guests to vote on the question</span>
+                    </label>
+                </div>
+            </div>
+
             <div class="flex items-center justify-between">
                 <button @click.prevent="save" class="bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                     Create
@@ -73,7 +117,7 @@ Polls- Creation
             </div>
         </form>
         <p class="text-center text-gray-500 text-xs">
-            &copy;2020 Larapoll. All rights reserved.
+            &copy;{{ date('Y') }} Larapoll. All rights reserved.
         </p>
     </div>
 </div>
@@ -105,19 +149,21 @@ Polls- Creation
                         { value: '', placeholder: 'Cristiano Ronaldo'},
                         { value: '', placeholder: 'Lionel Messi'},
                     ],
-                    canVisitors: false,
                    starts_at: '',
-                   ends_at: ''
+                   ends_at: '',
+                   error_message: '',
                }
             },
             methods:{
                addNewOption(){
                    if(this.newOption.length === 0){
-                       alert('Invalid string');
+                       this.error_message = "Please fill the option field";
+                       this.flushModal();
                        return;
                    }
                    if(this.filledOptions.filter( option => option === this.newOption).length !== 0){
-                       alert('Already Exists');
+                       this.error_message = "You can't use the same more than once";
+                       this.flushModal();
                        return;
                    }
 
@@ -129,7 +175,8 @@ Polls- Creation
                },
                 remove(index){
                     if(this.filledOptions.length <= 2){
-                        alert('At least we should have 2 options!');
+                        this.error_message = "Two options are the minimal";
+                        this.flushModal();
                         return;
                     }
                     this.options = this.options.map((option, localIndex) => {
@@ -141,8 +188,15 @@ Polls- Creation
                     }).filter(option => option);
                 },
                 save(){
+                   if(this.question.length === 0){
+                       this.error_message = "Please fill the question first";
+                       this.flushModal();
+                       return;
+                   }
+
                    if(this.filledOptions.length < 2){
-                       alert('At least we should have 2 options!');
+                       this.error_message = "Two options are the minimal";
+                       this.flushModal();
                        return;
                    }
 
@@ -152,6 +206,7 @@ Polls- Creation
                        options: this.filledOptions,
                        starts_at: this.starts_at,
                        ends_at: this.ends_at,
+                       canVisitorsVote: document.getElementById('canVisitors').checked
                    })
                    .then((response) => {
                        console.log(response)
@@ -159,6 +214,19 @@ Polls- Creation
                    .catch((error) => {
                        console.log(error)
                    })
+                },
+                toggleModal(){
+                    const body = document.querySelector('body');
+                    const modal = document.querySelector('.modal');
+                    modal.classList.toggle('opacity-0');
+                    modal.classList.toggle('pointer-events-none');
+                    body.classList.toggle('modal-active');
+                },
+                flushModal(){
+                    this.toggleModal();
+                    setTimeout(() => {
+                        this.toggleModal()
+                    }, 3000);
                 }
             }
         });
