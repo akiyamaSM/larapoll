@@ -3,34 +3,7 @@
 Polls- Creation
 @endsection
 @section('style')
-<style>
-    .errors-list {
-        list-style-type: none;
-    }
-
-    .clearfix {
-        clear: both;
-    }
-
-    .create-btn {
-        display: block;
-        width: 16%;
-        float: right;
-    }
-
-    .old_options,
-    #options,
-    .button-add {
-        list-style-type: none;
-    }
-
-    .add-input {
-        width: 80%;
-        display: inline-block;
-        margin-right: 10px;
-        margin-bottom: 10px;
-    }
-</style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" rel="stylesheet" />
 @endsection
 @section('content')
 <div class="container mx-auto" id="app">
@@ -82,14 +55,14 @@ Polls- Creation
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                         Starts at
                     </label>
-                    <input v-model="starts_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="datetime-local" placeholder="Jane">
+                    <input v-model="starts_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white localDates" type="text">
                     <p class="text-red-500 text-xs italic hidden">Please fill out this field.</p>
                 </div>
                 <div class="w-full md:w-1/2 px-3">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                         Ends at
                     </label>
-                    <input v-model="ends_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="datetime-local" placeholder="Doe">
+                    <input v-model="ends_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 localDates" type="text">
                 </div>
             </div>
 
@@ -110,16 +83,19 @@ Polls- Creation
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
     <script>
         new Vue({
            el: '#app',
-
             computed:{
               filledOptions(){
                 return this.options.map((option) => {
                     return option.value;
                 } ).filter((option) => option);
               }
+            },
+            mounted(){
+                $('.localDates').datetimepicker();
             },
             data(){
                return {
