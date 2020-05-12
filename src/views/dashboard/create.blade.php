@@ -35,26 +35,6 @@ Polls- Creation
             </li>
         </ol>
     </section>
-
-    <!--Modal-->
-    <div class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
-        <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-
-        <div class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-            <!-- Add margin if you want to see some of the overlay behind the modal-->
-            <div class="modal-content py-4 text-left px-6">
-                <!--Title-->
-                <div class="flex justify-between items-center pb-3">
-                    <p class="text-2xl font-bold">Upps, Something is Wrong!</p>
-                </div>
-                <!--Body-->
-                <p>@{{ error_message }}</p>
-
-            </div>
-        </div>
-    </div>
-
-
     <div class="w-full">
         <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
 
@@ -76,7 +56,7 @@ Polls- Creation
                     </button>
                 </div>
                 <div class="w-full flex items-center border-b border-b-2 border-teal-500 py-2">
-                    <input v-model="newOption" class="appearance-none bg-transparent border-none block w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Luka Modric" aria-label="Full name">
+                    <input @keyup.enter="addNewOption" v-model="newOption" class="appearance-none bg-transparent border-none block w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Luka Modric" aria-label="Full name">
                     <button @click.prevent="addNewOption" class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
                         Add
                     </button>
@@ -87,14 +67,14 @@ Polls- Creation
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-first-name">
                         Starts at
                     </label>
-                    <input v-model="starts_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white localDates" type="text">
+                    <input id="starts_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white localDates" type="text">
                     <p class="text-red-500 text-xs italic hidden">Please fill out this field.</p>
                 </div>
                 <div class="w-full md:w-1/2 px-3">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                         Ends at
                     </label>
-                    <input v-model="ends_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 localDates" type="text">
+                    <input id="ends_at" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 localDates" type="text">
                 </div>
             </div>
 
@@ -128,7 +108,9 @@ Polls- Creation
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <script src="https://unpkg.com/vue-toasted"></script>
     <script>
+        Vue.use(Toasted)
         new Vue({
            el: '#app',
             computed:{
@@ -139,18 +121,18 @@ Polls- Creation
               }
             },
             mounted(){
-                $('.localDates').datetimepicker();
+                $('.localDates').datetimepicker({
+                    format: 'y-m-d H:m',
+                });
             },
             data(){
                return {
                     newOption: '',
-                    question: '',
+                    question: 'A new question',
                     options: [
-                        { value: '', placeholder: 'Cristiano Ronaldo'},
-                        { value: '', placeholder: 'Lionel Messi'},
+                        { value: 'Cristiano Ronaldo', placeholder: 'Cristiano Ronaldo'},
+                        { value: 'Lionel Messi', placeholder: 'Lionel Messi'},
                     ],
-                   starts_at: '',
-                   ends_at: '',
                    error_message: '',
                }
             },
@@ -188,31 +170,43 @@ Polls- Creation
                     }).filter(option => option);
                 },
                 save(){
-                   if(this.question.length === 0){
-                       this.error_message = "Please fill the question first";
-                       this.flushModal();
-                       return;
-                   }
+                    if(this.question.length === 0){
+                        this.error_message = "Please fill the question first";
+                        this.flushModal();
+                        return;
+                    }
 
-                   if(this.filledOptions.length < 2){
-                       this.error_message = "Two options are the minimal";
-                       this.flushModal();
-                       return;
+                    if(this.filledOptions.length < 2){
+                        this.error_message = "Two options are the minimal";
+                        this.flushModal();
+                        return;
+                    }
+
+                   let data = {
+                       question: this.question,
+                       options: this.filledOptions,
+                       starts_at: document.getElementById('starts_at').value,
+                       canVisitorsVote: document.getElementById('canVisitors').checked
+                   };
+
+                   if(document.getElementById('ends_at').value !== ''){
+                       data.ends_at = document.getElementById('ends_at').value;
                    }
 
                    // POST TO STORE
-                   axios.post("{{ route('poll.store') }}", {
-                       question: this.question,
-                       options: this.filledOptions,
-                       starts_at: this.starts_at,
-                       ends_at: this.ends_at,
-                       canVisitorsVote: document.getElementById('canVisitors').checked
-                   })
+                   axios.post("{{ route('poll.store') }}", data)
                    .then((response) => {
-                       console.log(response)
+                       Vue.toasted.success(response.data).goAway(1500);
+                       setTimeout(() => {
+                           window.location.replace("{{ route('poll.index') }}");
+                       }, 1500)
                    })
                    .catch((error) => {
-                       console.log(error)
+
+                       Object.values(error.response.data.errors)
+                       .forEach((error) => {
+                           this.flushModal(error[0], 2000);
+                       })
                    })
                 },
                 toggleModal(){
@@ -222,11 +216,8 @@ Polls- Creation
                     modal.classList.toggle('pointer-events-none');
                     body.classList.toggle('modal-active');
                 },
-                flushModal(){
-                    this.toggleModal();
-                    setTimeout(() => {
-                        this.toggleModal()
-                    }, 3000);
+                flushModal(message = this.error_message, after = 1500){
+                    Vue.toasted.error(message).goAway(after);
                 }
             }
         });

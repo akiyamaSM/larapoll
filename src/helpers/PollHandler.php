@@ -36,7 +36,13 @@ class PollHandler
             $poll->maxSelection($request['maxCheck']);
         }
 
-        $poll->startsAt($request['starts_at'])->endsAt($request['ends_at'])->generate();
+        $poll->startsAt($request['starts_at']);
+
+        if(isset($request['ends_at'])){
+            $poll->endsAt($request['ends_at']);
+        }
+
+        $poll->generate();
 
         return $poll;
     }
