@@ -2,6 +2,7 @@
 namespace Inani\Larapoll;
 
 use Illuminate\Support\Facades\Facade;
+use Inani\Larapoll\Helpers\PollWriter;
 
 class PollWriterFacade extends Facade
 {
@@ -12,6 +13,6 @@ class PollWriterFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'pollwritter';
+        return PollWriter::class;
     }
 }
