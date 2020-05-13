@@ -203,7 +203,7 @@
                         .then((response) => {
                             Vue.toasted.success(response.data).goAway(1500);
                             setTimeout(() => {
-                                //window.location.replace("{{ route('poll.index') }}");
+                                window.location.replace("{{ route('poll.index') }}");
                             }, 1500)
                         })
                         .catch((error) => {
