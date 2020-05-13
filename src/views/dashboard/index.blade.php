@@ -99,15 +99,13 @@ Polls- Listing
                     <th data-priority="5">Votes</th>
                     <th data-priority="6">State</th>
                     <th data-priority="7">Edit</th>
-                    <th data-priority="8">Add Options</th>
-                    <th data-priority="9">Remove Options</th>
-                    <th data-priority="10">Remove</th>
-                    <th data-priority="11">Lock/Unlock</th>
+                    <th data-priority="8">Delete</th>
+                    <th data-priority="9">Lock/Unlock</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($polls as $poll)
-                <tr>
+                <tr class="text-center">
                     <th scope="row">{{ $poll->id }}</th>
                     <td>{{ $poll->question }}</td>
                     <td>{{ $poll->options_count }}</td>
@@ -125,16 +123,6 @@ Polls- Listing
                     <td>
                         <a class="btn btn-info btn-sm" href="{{ route('poll.edit', $poll->id) }}">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-success btn-sm" href="{{ route('poll.options.push', $poll->id) }}">
-                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <a class="btn btn-warning btn-sm" href="{{ route('poll.options.remove', $poll->id) }}">
-                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
                         </a>
                     </td>
                     <td>

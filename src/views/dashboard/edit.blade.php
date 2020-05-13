@@ -1,6 +1,6 @@
 @extends('larapoll::layouts.app')
 @section('title')
-    Polls- Creation
+    Polls- Edit
 @endsection
 @section('style')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.css" rel="stylesheet" />
@@ -95,6 +95,19 @@
                     </div>
                 </div>
 
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-lg font-bold mb-2 uppercase tracking-wide font-bold" for="question">
+                        Number of options to be selected
+                    </label>
+                    <select v-model="maxCheck" name="count_check" class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                        <option
+                            v-for="(option, index) in Array(options.length -1 ).keys()"
+                            :value="index + 1"
+                        >
+                            @{{ index + 1 }}
+                        </option>
+                    </select>
+                </div>
                 <div class="flex items-center justify-between">
                     <button @click.prevent="save" class="bg-teal-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
                         Save
@@ -133,6 +146,7 @@
             data(){
                 return {
                     id: "{{ $poll->id }}",
+                    maxCheck: "{{ $poll->maxCheck }}",
                     newOption: '',
                     canChangeOptions: "{{ $canChangeOptions }}",
                     question: "{{ $poll->question }}",
@@ -186,13 +200,22 @@
                         return;
                     }
 
+                    if(this.maxCheck >= this.filledOptions.length){
+                        this.error_message = "You can not allow to select all the options";
+                        this.flushModal();
+                        return;
+                    }
+
                     let data = {
                         question: this.question,
                         options: this.filledOptions,
                         starts_at: document.getElementById('starts_at').value,
                         canVisitorsVote: document.getElementById('canVisitors').checked,
                         canVoterSeeResult: document.getElementById('canVoterSeeResult').checked,
+                        count_check: this.maxCheck
                     };
+
+
 
                     if(document.getElementById('ends_at').value !== ''){
                         data.ends_at = document.getElementById('ends_at').value;
