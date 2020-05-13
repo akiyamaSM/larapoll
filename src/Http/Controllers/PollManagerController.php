@@ -18,7 +18,7 @@ class PollManagerController extends Controller
      */
     public function home()
     {
-        return view('larapoll::dashboard.home');
+        return redirect()->route('poll.index');
     }
     /**
      * Show all the Polls in the database
