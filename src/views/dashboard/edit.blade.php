@@ -46,12 +46,12 @@
                         Options
                     </label>
                     <div v-for="(option, index) in options" class="w-full flex items-center border-b border-b-2 border-teal-500 py-2">
-                        <input v-model="option.value" :placeholder="option.placeholder" class="appearance-none bg-transparent border-none block w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" />
-                        <button @click.prevent="remove(index)" class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">
+                        <input :disabled="canChangeOptions" v-model="option.value" :placeholder="option.placeholder" class="appearance-none bg-transparent border-none block w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" />
+                        <button v-if="canChangeOptions" @click.prevent="remove(index)" class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">
                             Remove
                         </button>
                     </div>
-                    <div class="w-full flex items-center border-b border-b-2 border-teal-500 py-2">
+                    <div v-if="canChangeOptions" class="w-full flex items-center border-b border-b-2 border-teal-500 py-2">
                         <input @keyup.enter="addNewOption" v-model="newOption" class="appearance-none bg-transparent border-none block w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="Luka Modric" aria-label="Full name">
                         <button @click.prevent="addNewOption" class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
                             Add
@@ -134,6 +134,7 @@
                 return {
                     id: "{{ $poll->id }}",
                     newOption: '',
+                    canChangeOptions: "{{ $canChangeOptions }}",
                     question: "{{ $poll->question }}",
                     options: {!! json_encode($options) !!},
                     error_message: '',

@@ -7,6 +7,7 @@ use Inani\Larapoll\Exceptions\CheckedOptionsException;
 use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 use Inani\Larapoll\Exceptions\OptionsNotProvidedException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
+use Inani\Larapoll\Option;
 use Inani\Larapoll\Poll;
 use InvalidArgumentException;
 
@@ -55,6 +56,18 @@ class PollHandler
      */
     public static function modify(Poll $poll, $data)
     {
+        if($poll->canChangeOptions()){
+            $poll->options()->delete();
+
+            collect($data['options'])->each(function ($option) use($poll){
+                Option::create([
+                    'name' => $option,
+                    'poll_id' => $poll->id,
+                    'votes' => 0
+                ]);
+            });
+        }
+
         if (isset($data['count_check'])) {
             if ($data['count_check'] < $poll->options()->count()) {
                 $poll->canSelect($data['count_check']);

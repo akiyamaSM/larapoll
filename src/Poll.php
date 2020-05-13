@@ -60,4 +60,14 @@ class Poll extends Model
     {
         return $this->canVisitorsVote === 1;
     }
+
+    /**
+     * Check if the user can change options
+     *
+     * @return bool
+     */
+    public function canChangeOptions()
+    {
+        return $this->votes()->count() === 0;
+    }
 }

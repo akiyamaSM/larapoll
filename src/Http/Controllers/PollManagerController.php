@@ -69,7 +69,10 @@ class PollManagerController extends Controller
                 'value' => $option->name,
             ];
         })->toArray();
-        return view('larapoll::dashboard.edit', compact('poll', 'options'));
+
+        $canChangeOptions = $poll->votes()->count() === 0;
+
+        return view('larapoll::dashboard.edit', compact('poll', 'options', 'canChangeOptions'));
     }
 
     /**
