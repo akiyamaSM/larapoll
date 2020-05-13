@@ -75,7 +75,7 @@ Polls- Listing
     </style>
 @endsection
 @section('content')
-<div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
+<div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2" id="app">
     <section class="p-10 px-0">
         <ol class="list-none p-0 inline-flex">
             <li class="flex items-center">
@@ -88,95 +88,114 @@ Polls- Listing
         </ol>
     </section>
     <div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
-        @if($polls->count() >= 1)
-            <table  id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
-            <thead>
-                <tr>
-                    <th data-priority="1">#</th>
-                    <th data-priority="2">Question</th>
-                    <th data-priority="3">Options</th>
-                    <th data-priority="4">Visitors allowed</th>
-                    <th data-priority="5">Votes</th>
-                    <th data-priority="6">State</th>
-                    <th data-priority="7">Edit</th>
-                    <th data-priority="8">Delete</th>
-                    <th data-priority="9">Lock/Unlock</th>
-                </tr>
-            </thead>
+            <table v-if="polls.length > 0"  id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
+                <thead>
+                    <tr>
+                        <th data-priority="1">#</th>
+                        <th data-priority="2">Question</th>
+                        <th data-priority="3">Options</th>
+                        <th data-priority="4">Visitors allowed</th>
+                        <th data-priority="5">Votes</th>
+                        <th data-priority="6">State</th>
+                        <th data-priority="7">Edit</th>
+                        <th data-priority="8">Delete</th>
+                        <th data-priority="9">Lock/Unlock</th>
+                    </tr>
+                </thead>
             <tbody>
-                @forelse($polls as $poll)
-                <tr class="text-center">
-                    <th scope="row">{{ $poll->id }}</th>
-                    <td>{{ $poll->question }}</td>
-                    <td>{{ $poll->options_count }}</td>
-                    <td>{{ $poll->canVisitorsVote ? 'Yes' : 'No' }}</td>
-                    <td>{{ $poll->votes_count }}</td>
+                <tr class="text-center" v-for="(poll, index) in polls">
+                    <th scope="row">@{{ poll.id }}</th>
+                    <td>@{{ poll.question }}</td>
+                    <td>@{{ poll.options_count }}</td>
+                    <td>@{{ poll.canVisitorsVote ? 'Yes' : 'No' }}</td>
+                    <td>@{{ poll.votes_count }}</td>
                     <td>
-                        @if($poll->isLocked())
-                        <span class="label label-danger">Closed</span>
-                        @elseif($poll->isComingSoon())
-                        <span class="label label-info">Soon</span>
-                        @elseif($poll->isRunning())
-                        <span class="label label-success">Started</span>
-                        @endif
+                        <span v-if="poll.isLocked" class="label label-danger">Closed</span>
+                        <span v-else-if="poll.isComingSoon" class="label label-info">Soon</span>
+                        <span v-else-if="poll.isRunning" class="label label-success">Started</span>
                     </td>
                     <td>
-                        <a class="btn btn-info btn-sm" href="{{ route('poll.edit', $poll->id) }}">
+                        <a class="btn btn-info btn-sm" :href="poll.edit_link">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         </a>
                     </td>
                     <td>
-                        <form class="delete" action="{{ route('poll.remove', $poll->id) }}" method="POST">
-                            {{ csrf_field() }}
-                            {{ method_field('DELETE') }}
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </button>
-                        </form>
+                        <a class="btn btn-info btn-sm" href="#" @click.prevent="deletePoll(index)">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
                     </td>
                     <td>
-                        @php $route = $poll->isLocked()? 'poll.unlock': 'poll.lock' @endphp
-                        @php $fa = $poll->isLocked()? 'fa fa-unlock': 'fa fa-lock' @endphp
-                        <form class="lock" action="{{ route($route, $poll->id) }}" method="POST">
-                            {{ csrf_field() }}
-                            {{ method_field('PATCH') }}
-                            <button type="submit" class="btn btn-sm">
-                                <i class="{{ $fa }}" aria-hidden="true"></i>
-                            </button>
-                        </form>
+                        <a class="btn btn-info btn-sm" href="#" @click.prevent="toggleLock(index)">
+                            <i v-if="poll.isLocked" class="fa fa-unlock" aria-hidden="true"></i>
+                            <i v-else class="fa fa-lock" aria-hidden="true"></i>
+                        </a>
                     </td>
                 </tr>
-                @endforeach
             </tbody>
         </table>
-        @else
-        <smal>No poll has been found. Try to add one <a href="{{ route('poll.create') }}">Now</a></smal>
-        @endif
+        <small v-else>No poll has been found. Try to add one <a href="{{ route('poll.create') }}">Now</a></small>
     </div>
 </div>
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
     <!--Datatables -->
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
     <script>
-        $(document).ready(function() {
+       new Vue({
+           el: "#app",
+           data(){
+               return {
+                   polls: {!! json_encode($polls) !!},
+               }
+           },
+           mounted(){
+               $('#example').DataTable( {
+                   responsive: true
+               } ) .columns.adjust().responsive.recalc();
+           },
+           methods:{
+               deletePoll(index){
+                    if(confirm('Do You really want to delete this poll?')){
+                        axios.delete(this.polls[index].delete_link)
+                            .then((response) => {
+                                this.polls.splice(index, 1);
+                            });
+                    }
+               },
+               toggleLock(index){
+                   if(this.polls[index].isLocked){
+                       this.unlock(index);
+                       return;
+                   }
 
-            var table = $('#example').DataTable( {
-                responsive: true
-            } )
-                .columns.adjust()
-                .responsive.recalc();
-        } );
-        // Delete Confirmation
-        $(".delete").on("submit", function() {
-            return confirm("Delete the poll?");
-        });
-
-        // Lock Confirmation
-        $(".lock").on("submit", function() {
-            return confirm("Lock/Unlock the poll?");
-        });
+                   this.lock(index)
+               },
+               lock(index){
+                   if(confirm('Do You really want to lock this poll?')){
+                       axios.patch(this.polls[index].lock_link)
+                           .then((response) => {
+                               this.assignNewData(response)
+                           });
+                   }
+               },
+               unlock(index){
+                   if(confirm('Do You really want to unlock this poll?')){
+                       axios.patch(this.polls[index].unlock_link)
+                           .then((response) => {
+                               this.assignNewData(response)
+                           });
+                   }
+               },
+               assignNewData(response){
+                   this.polls[index].isLocked = response.data.poll.isLocked;
+                   this.polls[index].isRunning = response.data.poll.isRunning;
+                   this.polls[index].isComingSoon = response.data.poll.isComingSoon;
+               }
+           }
+       })
     </script>
 @endsection

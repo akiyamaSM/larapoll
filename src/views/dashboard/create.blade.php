@@ -96,9 +96,6 @@ Polls- Creation
                 </button>
             </div>
         </form>
-        <p class="text-center text-gray-500 text-xs">
-            &copy;{{ date('Y') }} Larapoll. All rights reserved.
-        </p>
     </div>
 </div>
 

@@ -54,6 +54,10 @@
 </nav>
 
     @yield('content')
+
+    <p class="text-center text-gray-500 text-xs">
+        &copy;{{ date('Y') }} Larapoll. All rights reserved.
+    </p>
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     @yield('js')
