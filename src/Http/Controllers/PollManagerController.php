@@ -52,7 +52,7 @@ class PollManagerController extends Controller
                 ->with('danger', $exception->getMessage());
         }
 
-        return response('Your poll has been created successfully', 200);
+        return response('Your poll has been created successfully', 201);
     }
 
     /**
@@ -63,7 +63,13 @@ class PollManagerController extends Controller
      */
     public function edit(Poll $poll)
     {
-        return view('larapoll::dashboard.edit', compact('poll'));
+        $options = $poll->options->map(function ($option) {
+            return [
+                'id' => $option->id,
+                'value' => $option->name,
+            ];
+        })->toArray();
+        return view('larapoll::dashboard.edit', compact('poll', 'options'));
     }
 
     /**
@@ -71,13 +77,12 @@ class PollManagerController extends Controller
      *
      * @param Poll $poll
      * @param PollCreationRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function update(Poll $poll, PollCreationRequest $request)
     {
         PollHandler::modify($poll, $request->all());
-        return redirect(route('poll.index'))
-            ->with('success', 'Your poll has been updated successfully');
+        return response('Your poll has been updated successfully', 200);
     }
 
     /**
