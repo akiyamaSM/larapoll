@@ -128,10 +128,10 @@ Polls- Creation
             data(){
                return {
                     newOption: '',
-                    question: 'A new question',
+                    question: '',
                     options: [
-                        { value: 'Cristiano Ronaldo', placeholder: 'Cristiano Ronaldo'},
-                        { value: 'Lionel Messi', placeholder: 'Lionel Messi'},
+                        { value: '', placeholder: 'Cristiano Ronaldo'},
+                        { value: '', placeholder: 'Lionel Messi'},
                     ],
                    error_message: '',
                }
@@ -208,13 +208,6 @@ Polls- Creation
                            this.flushModal(error[0], 2000);
                        })
                    })
-                },
-                toggleModal(){
-                    const body = document.querySelector('body');
-                    const modal = document.querySelector('.modal');
-                    modal.classList.toggle('opacity-0');
-                    modal.classList.toggle('pointer-events-none');
-                    body.classList.toggle('modal-active');
                 },
                 flushModal(message = this.error_message, after = 1500){
                     Vue.toasted.error(message).goAway(after);
