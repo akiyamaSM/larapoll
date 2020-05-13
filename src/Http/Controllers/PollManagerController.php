@@ -18,7 +18,7 @@ class PollManagerController extends Controller
      */
     public function home()
     {
-        return view('larapoll::dashboard.home');
+        return redirect()->route('poll.index');
     }
     /**
      * Show all the Polls in the database
@@ -27,9 +27,16 @@ class PollManagerController extends Controller
      */
     public function index()
     {
-        $polls = Poll::withCount('options', 'votes')->latest()->paginate(
-            config('larapoll_config.pagination')
-        );
+        $polls = Poll::withCount('options', 'votes')->get()->map(function ($poll){
+            $poll->isComingSoon = $poll->isComingSoon();
+            $poll->isLocked = $poll->isLocked();
+            $poll->isRunning = $poll->isRunning();
+            $poll->edit_link = route('poll.edit', $poll->id);
+            $poll->delete_link = route('poll.remove', $poll->id);
+            $poll->lock_link = route('poll.lock', $poll->id);
+            $poll->unlock_link = route('poll.unlock', $poll->id);
+            return $poll;
+        })->toArray();
         return view('larapoll::dashboard.index', compact('polls'));
     }
 
@@ -52,8 +59,7 @@ class PollManagerController extends Controller
                 ->with('danger', $exception->getMessage());
         }
 
-        return redirect(route('poll.index'))
-            ->with('success', 'Your poll has been addedd successfully');
+        return response('Your poll has been created successfully', 201);
     }
 
     /**
@@ -64,7 +70,16 @@ class PollManagerController extends Controller
      */
     public function edit(Poll $poll)
     {
-        return view('larapoll::dashboard.edit', compact('poll'));
+        $options = $poll->options->map(function ($option) {
+            return [
+                'id' => $option->id,
+                'value' => $option->name,
+            ];
+        })->toArray();
+
+        $canChangeOptions = $poll->votes()->count() === 0;
+
+        return view('larapoll::dashboard.edit', compact('poll', 'options', 'canChangeOptions'));
     }
 
     /**
@@ -72,13 +87,12 @@ class PollManagerController extends Controller
      *
      * @param Poll $poll
      * @param PollCreationRequest $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function update(Poll $poll, PollCreationRequest $request)
     {
         PollHandler::modify($poll, $request->all());
-        return redirect(route('poll.index'))
-            ->with('success', 'Your poll has been updated successfully');
+        return response('Your poll has been updated successfully', 200);
     }
 
     /**
@@ -90,9 +104,7 @@ class PollManagerController extends Controller
     public function remove(Poll $poll)
     {
         $poll->remove();
-
-        return redirect(route('poll.index'))
-            ->with('success', 'Your poll has been deleted successfully');
+        return response('', 200);
     }
     public function create()
     {
@@ -108,8 +120,16 @@ class PollManagerController extends Controller
     public function lock(Poll $poll)
     {
         $poll->lock();
-        return redirect(route('poll.index'))
-            ->with('success', 'Your poll has been locked successfully');
+
+        $poll->isComingSoon = $poll->isComingSoon();
+        $poll->isLocked = $poll->isLocked();
+        $poll->isRunning = $poll->isRunning();
+        $poll->edit_link = route('poll.edit', $poll->id);
+        $poll->delete_link = route('poll.remove', $poll->id);
+
+        return response()->json([
+            'poll' => $poll
+        ], 200);
     }
 
     /**
@@ -121,7 +141,15 @@ class PollManagerController extends Controller
     public function unlock(Poll $poll)
     {
         $poll->unLock();
-        return redirect(route('poll.index'))
-            ->with('success', 'Your poll has been unlocked successfully');
+
+        $poll->isComingSoon = $poll->isComingSoon();
+        $poll->isLocked = $poll->isLocked();
+        $poll->isRunning = $poll->isRunning();
+        $poll->edit_link = route('poll.edit', $poll->id);
+        $poll->delete_link = route('poll.remove', $poll->id);
+
+        return response()->json([
+            'poll' => $poll
+        ], 200);
     }
 }

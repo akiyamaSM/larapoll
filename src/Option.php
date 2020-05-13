@@ -9,7 +9,7 @@ class Option extends Model
 {
     use Votable;
 
-    protected $fillable = ['name'];
+    protected $guarded = [];
 
     protected $table = 'larapoll_options';
     /**

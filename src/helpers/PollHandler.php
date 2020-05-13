@@ -7,6 +7,7 @@ use Inani\Larapoll\Exceptions\CheckedOptionsException;
 use Inani\Larapoll\Exceptions\OptionsInvalidNumberProvidedException;
 use Inani\Larapoll\Exceptions\OptionsNotProvidedException;
 use Inani\Larapoll\Exceptions\RemoveVotedOptionException;
+use Inani\Larapoll\Option;
 use Inani\Larapoll\Poll;
 use InvalidArgumentException;
 
@@ -27,7 +28,7 @@ class PollHandler
 
         $poll = new Poll([
             'question' => $request['question'],
-            'canVisitorsVote' => isset($request['canVisitorsVote'])
+            'canVisitorsVote' => $request['canVisitorsVote']
         ]);
 
         $poll->addOptions($request['options']);
@@ -36,50 +37,61 @@ class PollHandler
             $poll->maxSelection($request['maxCheck']);
         }
 
-        $poll->startsAt($request['starts_at'])->endsAt($request['ends_at'])->generate();
+        $poll->startsAt($request['starts_at']);
+
+        if(isset($request['ends_at'])){
+            $poll->endsAt($request['ends_at']);
+        }
+
+        $poll->generate();
 
         return $poll;
     }
 
     /**
-     * Modify The number of votable options
+     * Modify The poll
      *
      * @param Poll $poll
      * @param $data
      */
     public static function modify(Poll $poll, $data)
     {
-        if (array_key_exists('count_check', $data)) {
+        if($poll->canChangeOptions()){
+            $poll->options()->delete();
+
+            collect($data['options'])->each(function ($option) use($poll){
+                Option::create([
+                    'name' => $option,
+                    'poll_id' => $poll->id,
+                    'votes' => 0
+                ]);
+            });
+        }
+
+        if (isset($data['count_check'])) {
             if ($data['count_check'] < $poll->options()->count()) {
                 $poll->canSelect($data['count_check']);
             }
         }
 
+        // change the ability to vote by the guests
+        if (isset($data['canVisitorsVote'])) {
+            $poll->canVisitorsVote = $data['canVisitorsVote'];
+        }
+
         // change see result value
-        if (array_key_exists('canVoterSeeResult', $data)) {
-            if (isset($data['canVoterSeeResult']) && $data['canVoterSeeResult']) {
-                $poll->enableShowResults();
-            }
-        } else {
-            $poll->disableShowResults();
+        if (isset($data['canVoterSeeResult'])) {
+            $poll->canVoterSeeResult = $data['canVoterSeeResult'];
         }
 
-        if (array_key_exists('close', $data)) {
-            if (isset($data['close']) && $data['close']) {
-                $poll->lock();
-                return;
-            }
+        $poll->question = $data['question'];
+
+        if(isset($data['ends_at'])){
+            $poll->endsAt($data['ends_at']);
         }
 
-
-
-        $poll->update([
-            'question' => $data['question'],
-        ]);
-
-        $poll->startsAt($data['starts_at'])->endsAt($data['ends_at'])->save();
-
-        $poll->unLock();
+        $poll->startsAt($data['starts_at'])
+            ->save();
     }
 
     /**

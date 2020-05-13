@@ -35,6 +35,7 @@ trait PollCreator
      * @param $options
      * @return $this
      * @throws \InvalidArgumentException
+     * @throws DuplicatedOptionsException
      */
     public function addOptions($options)
     {
