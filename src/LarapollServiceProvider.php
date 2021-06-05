@@ -3,7 +3,7 @@ namespace Inani\Larapoll;
 
 use Illuminate\Support\ServiceProvider;
 use Inani\Larapoll\Helpers\PollWriter;
-use Illuminate\Database\Eloquent\Factory;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LarapollServiceProvider extends ServiceProvider
 {
@@ -35,8 +35,6 @@ class LarapollServiceProvider extends ServiceProvider
             __DIR__ . '/database/migrations/2019_04_20_145921_schema_changes.php'
             => base_path('database/migrations/2019_04_20_145921_schema_changes.php'),
         ]);
-        // load factories
-        $this->registerFactories();
         // routes
         $this->loadRoutesFrom(__DIR__ . '/Http/routes.php');
         // views
@@ -59,15 +57,4 @@ class LarapollServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Register an additional directory of factories.
-     * 
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (!app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/database/factories');
-        }
-    }
 }
