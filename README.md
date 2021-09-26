@@ -133,7 +133,7 @@ With Larapoll its easy to integrate a poll for users to vote, you only have to s
 - the ID of the poll 
 
 ```php
-{{ PollWriter::draw(Poll::find(77)) }}
+{{ PollWriter::draw(Inani\Larapoll\Poll::find(77)) }}
 ```
 ### Override views
 You can override the views related to the results page and both pages checkbox/radio via the same larapoll_config.php file in the config folder.
