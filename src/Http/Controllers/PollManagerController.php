@@ -31,6 +31,7 @@ class PollManagerController extends Controller
             $poll->isComingSoon = $poll->isComingSoon();
             $poll->isLocked = $poll->isLocked();
             $poll->isRunning = $poll->isRunning();
+            $poll->hasEnded = $poll->hasEnded();
             $poll->edit_link = route('poll.edit', $poll->id);
             $poll->delete_link = route('poll.remove', $poll->id);
             $poll->lock_link = route('poll.lock', $poll->id);
@@ -124,6 +125,7 @@ class PollManagerController extends Controller
         $poll->isComingSoon = $poll->isComingSoon();
         $poll->isLocked = $poll->isLocked();
         $poll->isRunning = $poll->isRunning();
+        $poll->hasEnded = $poll->hasEnded();
         $poll->edit_link = route('poll.edit', $poll->id);
         $poll->delete_link = route('poll.remove', $poll->id);
 

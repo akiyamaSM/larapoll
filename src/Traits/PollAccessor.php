@@ -1,7 +1,6 @@
 <?php
 namespace Inani\Larapoll\Traits;
 
-
 trait PollAccessor
 {
 
@@ -82,7 +81,7 @@ trait PollAccessor
      */
     public function isRunning()
     {
-        return $this->isOpen() && $this->hasStarted();
+        return $this->isOpen() && $this->hasStarted() && !$this->hasEnded();
     }
 
     /**
@@ -103,5 +102,15 @@ trait PollAccessor
     public function isComingSoon()
     {
         return $this->isOpen() && now() < $this->starts_at;
+    }
+
+    /**
+     * If the poll has already ended
+     *
+     * @return bool
+     */
+    public function hasEnded()
+    {
+        return $this->ends_at < now();
     }
 }

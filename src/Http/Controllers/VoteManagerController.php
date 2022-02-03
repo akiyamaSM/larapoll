@@ -19,9 +19,7 @@ class VoteManagerController extends Controller
      */
     public function vote(Poll $poll, Request $request)
     {
-
         try{
-
             $vote = $this->resolveVoter($request, $poll)
                 ->poll($poll)
                 ->vote($request->get('options'));
