@@ -46,7 +46,7 @@ trait Voter
         if (is_null($this->poll))
             throw new PollNotSelectedToVoteException();
 
-        if ($this->poll->isLocked())
+        if ($this->poll->isLocked() || $this->poll->hasEnded())
             throw new VoteInClosedPollException();
 
         if ($this->hasVoted($this->poll->id))

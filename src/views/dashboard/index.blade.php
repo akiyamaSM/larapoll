@@ -8,7 +8,6 @@ Polls- Listing
     <!--Responsive Extension Datatables CSS-->
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
 
-
     <style>
 
         /*Overrides for Tailwind CSS */
@@ -113,6 +112,7 @@ Polls- Listing
                         <span v-if="poll.isLocked" class="label label-danger">Closed</span>
                         <span v-else-if="poll.isComingSoon" class="label label-info">Soon</span>
                         <span v-else-if="poll.isRunning" class="label label-success">Started</span>
+                        <span v-else-if="poll.hasEnded" class="label label-success">Ended</span>
                     </td>
                     <td>
                         <a class="btn btn-info btn-sm" :href="poll.edit_link">
